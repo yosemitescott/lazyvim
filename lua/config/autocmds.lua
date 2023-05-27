@@ -19,16 +19,15 @@
 -- })
 
 function _G.set_terminal_keymaps()
-    local opts = {noremap = true}
+    local opts = { noremap = true }
     -- vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-    vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-    vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-    vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-    vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 end
 
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
-
+vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
 vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = { "qf", "help", "man", "lspinfo", "spectre_panel" },
@@ -43,7 +42,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = { "gitcommit", "markdown" },
     callback = function()
-        vim.opt_local.wrap  = true
+        vim.opt_local.wrap = true
         vim.opt_local.spell = true
     end,
 })
@@ -96,22 +95,21 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 -- The ones I added
 ------------------------------------------------------------------------
 local splitwin = vim.api.nvim_create_augroup("ChangeWindows", { clear = true })
-vim.api.nvim_create_autocmd({"WinEnter", "FocusGained", "InsertLeave"}, {
-    group    = splitwin,
+vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained", "InsertLeave" }, {
+    group = splitwin,
     callback = function()
         vim.opt_local.relativenumber = true
-        vim.opt_local.cursorline     = true
+        vim.opt_local.cursorline = true
     end,
 })
 
-vim.api.nvim_create_autocmd({"WinLeave", "FocusLost", "InsertEnter"}, {
-    group    = splitwin,
+vim.api.nvim_create_autocmd({ "WinLeave", "FocusLost", "InsertEnter" }, {
+    group = splitwin,
     callback = function()
         vim.opt_local.relativenumber = false
-        vim.opt_local.cursorline     = false
+        vim.opt_local.cursorline = false
     end,
 })
-
 
 -- My Highlights
 vim.cmd("hi def link MyTodo Todo")
@@ -119,11 +117,11 @@ vim.cmd("hi UVMF_HIGHLIGHT     guifg=#00d7af guibg=NONE guisp=NONE gui=bold cter
 vim.cmd("hi UVMF_PRAGMA        guifg=#8787ff guibg=NONE guisp=NONE gui=bold ctermfg=105 ctermbg=NONE cterm=underline")
 vim.cmd("hi TrailingWhitespace ctermbg=red guibg=red")
 
-vim.w.m1 = vim.fn.matchadd("TrailingWhitespace", '\\v\\s+$')
-vim.w.m1 = vim.fn.matchadd("Todo",               '\\<SPF\\>')
+vim.w.m1 = vim.fn.matchadd("TrailingWhitespace", "\\v\\s+$")
+vim.w.m1 = vim.fn.matchadd("Todo", "\\<SPF\\>")
 --vim.w.m1 = vim.fn.matchadd("Todo",               '\\<NOTE\\>')
-vim.w.m1 = vim.fn.matchadd("UVMF_HIGHLIGHT",     '\\<UVMF_CHANGE_ME\\>')
-vim.w.m1 = vim.fn.matchadd("UVMF_PRAGMA",        '\\<pragma\\>')
+vim.w.m1 = vim.fn.matchadd("UVMF_HIGHLIGHT", "\\<UVMF_CHANGE_ME\\>")
+vim.w.m1 = vim.fn.matchadd("UVMF_PRAGMA", "\\<pragma\\>")
 
 -------------------------------------------
 -- Autocmds to rewrite

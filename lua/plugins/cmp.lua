@@ -1,77 +1,77 @@
 local M = {
-  "hrsh7th/nvim-cmp",
-  dependencies = {
-    "hrsh7th/cmp-emoji",
-    "L3MON4D3/LuaSnip",
-  },
-  ---@param opts cmp.ConfigSchema
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+        "hrsh7th/cmp-emoji",
+        "L3MON4D3/LuaSnip",
+    },
+    -- @param opts cmp.ConfigSchema
 }
 
 function M.config()
-  local cmp = require("cmp")
-  local nvim_lua = require("luasnip")
+    local cmp      = require("cmp")
+    local nvim_lua = require("luasnip")
 
   --   פּ ﯟ   some other good icons
   local kind_icons = {
-    Text = "",
-    Method = "m",
-    Function = "",
-    Constructor = "",
-    Field = "",
-    Variable = "",
-    Class = "",
-    Interface = "",
-    Module = "",
-    Property = "",
-    Unit = "",
-    Value = "",
-    Enum = "",
-    Keyword = "",
-    Snippet = "",
-    Color = "",
-    File = "",
-    Reference = "",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "",
-    Event = "",
-    Operator = "",
-    TypeParameter = "",
+        Text          = "",
+        Method        = "m",
+        Function      = "",
+        Constructor   = "",
+        Field         = "",
+        Variable      = "",
+        Class         = "",
+        Interface     = "",
+        Module        = "",
+        Property      = "",
+        Unit          = "",
+        Value         = "",
+        Enum          = "",
+        Keyword       = "",
+        Snippet       = "",
+        Color         = "",
+        File          = "",
+        Reference     = "",
+        Folder        = "",
+        EnumMember    = "",
+        Constant      = "",
+        Struct        = "",
+        Event         = "",
+        Operator      = "",
+        TypeParameter = "",
   }
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        luasnip.lsp_expand(args.body) -- For `luasnip` users.
-      end,
-    },
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                luasnip.lsp_expand(args.body) -- For `luasnip` users.
+            end,
+        },
 
     mapping = cmp.mapping.preset.insert({
-      --      ["<C-f>"]       = cmp.mapping.scroll_docs(4),
-      --      ["<C-d>"]       = cmp.mapping.scroll_docs(-4),
-      --      ["<C-p>"]       = cmp.mapping.select_prev_item(),
-      --      ["<C-n>"]       = cmp.mapping.select_next_item(),
-      ["<C-k>"] = cmp.mapping.select_prev_item(),
-      ["<C-j>"] = cmp.mapping.select_next_item(),
-      ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-      ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
-      ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-      ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ["<C-e>"] = cmp.mapping({
-        i = cmp.mapping.abort(),
-        c = cmp.mapping.close(),
-      }),
+    --      ["<C-f>"]       = cmp.mapping.scroll_docs(4),
+    --      ["<C-d>"]       = cmp.mapping.scroll_docs(-4),
+    --      ["<C-p>"]       = cmp.mapping.select_prev_item(),
+    --      ["<C-n>"]       = cmp.mapping.select_next_item(),
+            ["<C-k>"]     = cmp.mapping.select_prev_item(),
+            ["<C-j>"]     = cmp.mapping.select_next_item(),
+            ["<C-b>"]     = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+            ["<C-f>"]     = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+            ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+            ["<C-y>"]     = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+            ["<C-e>"]     = cmp.mapping({
+                                i = cmp.mapping.abort(),
+                                c = cmp.mapping.close(),
+                            }),
       -- Accept currently selected item. If none selected, `select` first item.
       -- Set `select` to `false` to only confirm explicitly selected items.
-      ["<CR>"] = cmp.mapping.confirm({ select = false }),
+      ["<CR>"]  = cmp.mapping.confirm({ select = false }),
       ["<c-i>"] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      }),
+                    behavior = cmp.ConfirmBehavior.Insert,
+                    select   = true,
+                }),
       ["<c-q>"] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      }),
+                    behavior = cmp.ConfirmBehavior.Replace,
+                    select   = true,
+                }),
 
       -- If you want tab completion :'(
       --  First you have to just promise to read `:help ins-completion`.
@@ -110,35 +110,50 @@ function M.config()
         --              vim_item.kind = kind_icons[vim_item.kind]
         --              vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
         vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-        vim_item.menu = ({
-          nvim_lsp = "[LSP]",
-          nvim_lua = "[NVIMLUA]",
-          luasnip = "[Snippet]",
-          buffer = "[Buffer]",
-          path = "[Path]",
-          emoji = "[Emoji]",
-        })[entry.source.name]
+        vim_item.menu = ({nvim_lsp = "[LSP]",
+                          nvim_lua = "[NVIMLUA]",
+                          luasnip  = "[Snippet]",
+                          buffer   = "[Buffer]",
+                          path     = "[Path]",
+                          emoji    = "[Emoji]",
+                        })[entry.source.name]
         return vim_item
       end,
     },
     sources = {
-      { name = "nvim_lsp" },
-      { name = "nvim_lua" },
-      { name = "luasnip" },
-      { name = "buffer", keyword_length = 3 },
-      { name = "path" },
+        { name = "nvim_lsp" },
+        { name = "nvim_lua" },
+        { name = "luasnip" },
+        { name = "buffer",
+          keyword_length = 3,
+          option = {
+                      get_bufnrs = function()     -- Look in all buffers
+                          return vim.api.nvim_list_bufs()
+                      end
+                   },
+--        option = {
+--                    get_bufnrs = function()     -- Look in visable buffers
+--                        local bufs = {}
+--                        for _, win in ipairs(vim.api.nvim_list_wins()) do
+--                            bufs[vim.api.nvim_win_get_buf(win)] = true
+--                        end
+--                        return vim.tbl_keys(bufs)
+--                    end
+--                },
+        },
+        { name = "path" },
     },
     confirm_opts = {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
+        behavior = cmp.ConfirmBehavior.Replace,
+        select   = false,
     },
     window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
+        completion    = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
     },
     experimental = {
-      ghost_text = true,
-      --      native_menu = false,
+        ghost_text = true,
+        native_menu = false,
     },
   })
 

@@ -477,11 +477,15 @@ local uvm_error = s(
     "uvme",
     fmt(
         [[
-        `uvm_error({}, {})
+        `{}({}, {})
 
         ]],
         {
             c(1, {
+                t("uvm_error"),
+                t("uvm_fatal"),
+            }),
+            c(2, {
                 t("get_type_name()"),
                 t("get_name()"),
                 t('"SPF"'),
@@ -495,7 +499,7 @@ local uvm_error = s(
                     )
                 ),
             }),
-            c(2, {
+            c(3, {
                 sn(
                     1,
                     fmt(
@@ -611,6 +615,47 @@ local uvm_create_seq = s(
 )
 
 table.insert(snippets, uvm_create_seq)
+
+--------------------------------------------------------------------
+-- randomize snippet
+--------------------------------------------------------------------
+local uvm_randomize = s(
+    "uvmr",
+    fmt(
+        [[
+        if ( !req.randomize() with {}
+            {} == {}{};
+        {})
+            begin
+                `uvm_fatal(get_type_name(), "Failed to randomize {}")
+            end  // if
+
+        ]],
+        {
+            t("{"),
+            i(1, "transaction_variable"),
+            c(2, {
+                t("local::"),
+                t("this::"),
+                t(""),
+                sn(
+                    1,
+                    fmt(
+                        [[
+                    "{}"
+                    ]],
+                        i(1, "roll_your_own")
+                    )
+                ),
+            }),
+            i(3, "some_value"),
+            t("}"),
+            i(4, "transaction_item_name"),
+        }
+    )
+)
+
+table.insert(snippets, uvm_randomize)
 
 --------------------------------------------------------------------
 -- create sequence snippet

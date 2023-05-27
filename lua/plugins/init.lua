@@ -1,9 +1,10 @@
 return {
-  -- Git related plugins
-  { "tpope/vim-fugitive", event = "BufEnter" },
-  { "tpope/vim-rhubarb" },
-  --  {'tpope/vim-sleuth'},                    -- Detect tabstop and shiftwidth automatically
-  { "will133/vim-dirdiff" }, -- Run a diff on 2 directories.
+    -- Git related plugins
+    --  {'tpope/vim-sleuth'},                    -- Detect tabstop and shiftwidth automatically
+    { "will133/vim-dirdiff" }, -- Run a diff on 2 directories.
+    { "neovim/nvim-lspconfig", opts = {
+        autoformat = false,
+    } }, -- Run a diff on 2 directories.
 }
 
 --  -- Misc

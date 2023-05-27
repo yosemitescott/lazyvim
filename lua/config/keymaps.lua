@@ -2,24 +2,6 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 --
---
---
-
---
--- refactor(telescope)!: moved most `help` keymaps under `<leader>s` (search) (3 hours ago)
--- refactor(neotree)!: keymaps are now under `<leader>fe` and `<leader>fE` (3 hours ago)
--- refactor(noice)!: noice keymaps are now under `<leader>sn` (3 hours ago)
--- refactor(keymaps)!: terminal keymaps are now under `<leader>ft` and `<leader>fT` (3 hours ago)
--- refactor(keymaps): highlights under cursor is now mapped to `<leader>sH` (3 hours ago)
--- feat(keymaps)!: redraw is now mapped to `<leader>ur` (UI redraw) (4 hours ago)
--- feat(keymaps)!: toggle keymaps can now be found under UI `<leader>u` (4 hours ago)
---
---
---
---
---
---
---
 local opts = { noremap = true, silent = true }
 
 local term_opts = { silent = true }
@@ -65,8 +47,8 @@ keymap("n", "N", "Nzzzv", opts)
 --   keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 
 -- Navigate buffers
-keymap("n", "<S-l>", ":bnext<CR>", opts)
-keymap("n", "<S-h>", ":bprevious<CR>", opts)
+--keymap("n", "<S-l>", ":bnext<CR>", opts)
+--keymap("n", "<S-h>", ":bprevious<CR>", opts)
 --keymap("n", "<TAB>", ":bnext<CR>", opts)
 --keymap("n", "<S-TAB>", ":bprevious<CR>", opts)
 
@@ -77,8 +59,16 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", { noremap = true, silent = true, desc = "Close/Delete Buffer" })
 
 -- Delete Trailing Whitespace
-keymap("n", "<leader>cc", [[:%s/\s\+$//e<cr>]],       { noremap = true, silent = true, desc = "Clean Up Code" })
-keymap("n", "<leader>cC", [[:bufdo %s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code - All buffers" })
+keymap("n", "<leader>cc", [[:%s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code" })
+keymap(
+    "n",
+    "<leader>cC",
+    [[:bufdo %s/\s\+$//e<cr>]],
+    { noremap = true, silent = true, desc = "Clean Up Code - All buffers" }
+)
+
+keymap("n", "<leader>c=", [[gg=G]], { noremap = true, silent = true, desc = "Reformat all lines" })
+
 --   command = [[%s/\s\+$//e]],
 
 --   -- Create Splits
@@ -104,11 +94,6 @@ vim.keymap.set("n", "#3", "@b")
 vim.keymap.set("n", "#4", "@c")
 vim.keymap.set("n", "#5", "@d")
 
--- GIT
---vim.keymap.set('n', '<leader>gc' , ':GCheckout<CR>',   { noremap = true, silent = true, desc = "Search/Replace Dialogue" })
-vim.keymap.set('n', '<leader>gj' , ':diffget //3<CR>', { noremap = true, silent = true, desc = "Git diff left side" })
-vim.keymap.set('n', '<leader>gf' , ':diffget //2<CR>', { noremap = true, silent = true, desc = "Git diff right side" })
---vim.keymap.set('n', '<leader>gs' , ':G<CR>')
 --   ----------------------------------------------------------------------
 --   -- Insert --
 --   ----------------------------------------------------------------------
@@ -117,9 +102,9 @@ vim.keymap.set('n', '<leader>gf' , ':diffget //2<CR>', { noremap = true, silent 
 --   keymap("i", "kj", "<ESC>", opts)
 
 -- Undo break points - put a common character to break up the undos
-keymap("i", ",", ",<c-g>u", opts)
-keymap("i", ".", ".<c-g>u", opts)
-keymap("i", ";", ";<c-g>u", opts)
+-- keymap("i", ",", ",<c-g>u", opts)        These are already in LazyVim
+-- keymap("i", ".", ".<c-g>u", opts)
+-- keymap("i", ";", ";<c-g>u", opts)
 keymap("i", "=", "=<c-g>u", opts)
 
 -- Move text up and down
@@ -135,9 +120,6 @@ keymap("i", "=", "=<c-g>u", opts)
 --   keymap("v", "H", "<gv", opts)
 --   keymap("v", "L", ">gv", opts)
 
--- Move text up and down
-keymap("v", "<A-j>", ":m .+1<CR>==", opts)
-keymap("v", "<A-k>", ":m .-2<CR>==", opts)
 
 -- Holds onto the paste register after puts
 keymap("v", "p", '"_dP', opts)
@@ -147,8 +129,6 @@ keymap("v", "p", '"_dP', opts)
 --   ----------------------------------------------------------------------
 keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
-keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 --   ----------------------------------------------------------------------
 --   -- NvimTree
@@ -170,17 +150,32 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 --
 --   ----------------------------------------------------------------------
---   align - Leader a was taken so e is used for "edit"
---   So far, these are only active during visual mode
+--   These provide labels 
 --   ----------------------------------------------------------------------
 local wk = require("which-key")
 wk.register({
-  e = {
-    name = "+align",
-    ["1"] = { name = "+1st line" },
-    m     = { name = "+min space" },
-    u     = { name = "+UVM" },
-  },
+    v = {
+        name = "+systemVerilog",
+    },
+}, { prefix = "<leader>", mode = "n" })
+
+wk.register({
+    r = {
+        name = "+replace",
+    },
+}, { prefix = "<leader>", mode = "n" })
+
+--   ----------------------------------------------------------------------
+--   align - Leader a was taken so e is used for "edit"
+--   So far, these are only active during visual mode
+--   ----------------------------------------------------------------------
+wk.register({
+    e = {
+        name = "+align",
+        ["1"] = { name = "+1st line" },
+        m = { name = "+min space" },
+        u = { name = "+UVM" },
+    },
 }, { prefix = "<leader>", mode = "v" })
 
 keymap("v", "<Leader>ee", [[:!align <CR>]],         { noremap = true, silent = true, desc = "Align Default" })
@@ -218,7 +213,7 @@ keymap("v", "<Leader>em=", [[:!align -m =<CR>]],    { noremap = true, silent = t
 keymap("v", "<Leader>em:", [[:!align -m :<CR>]],    { noremap = true, silent = true, desc = "Align Min :" })
 keymap("v", "<Leader>em-", [[:!align -m \-<CR>]],   { noremap = true, silent = true, desc = "Align Min -" })
 
-keymap("v", "<Leader>eum", [[:!align m_<CR>]],      { noremap = true, silent = true, desc = "Align m_" })
+keymap("v", "<Leader>eum", [[:!align " m_"<CR>]],   { noremap = true, silent = true, desc = "Align m_" })
 keymap("v", "<Leader>eu:", [[:!align ::<CR>]],      { noremap = true, silent = true, desc = "Align ::" })
 keymap("v", "<Leader>eut", [[:!align type<CR>]],    { noremap = true, silent = true, desc = "Align type" })
 

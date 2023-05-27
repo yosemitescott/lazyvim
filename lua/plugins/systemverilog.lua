@@ -1,6 +1,20 @@
 local M = {
     'vhda/verilog_systemverilog.vim',
+    dependencies = {
+        'preservim/tagbar',
+    },
     ft = {"verilog", "verilog_systemverilog", "systemverilog"},
+    keys = {
+        { "<leader>vs", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
+        { "<leader>vi", "<cmd>VerilogFollowInstance<CR>",                                desc = "follow Instance start" },
+        { "<leader>vr", "<cmd>VerilogReturnInstance<CR>",                                desc = "Return instance" },
+        { "<leader>vp", "<cmd>VerilogFollowPort<CR>",                                    desc = "follow Port" },
+        { "<leader>vt", "<cmd>TagbarToggle<CR>",                                         desc = "Toggle Tagbar" },
+        { "<leader>vf", "<cmd>VerilogFoldingRemove comment<CR> <BAR><cmd>foldopen!<CR>", desc = "Remove comment Folding" },
+        { "<leader>vF", "<cmd>VerilogFoldingAdd comment<CR>",                            desc = "Add comment Folding" },
+        { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
+        { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
+    },
 }
 
 
@@ -14,10 +28,16 @@ function M.config()                 -- Use config since it's not a LUA plugin
     })
 
     vim.opt_local['smartindent'] = false
-    vim.opt_local['autoindent'] = true
+    vim.opt_local['autoindent']  = true
 
     vim.g.verilog_disable_indent_lst = "eos"
 --  vim.g.verilog_instance_skip_last_coma = 1
+--  vim.g.tagbar_ctags_bin = 'uctags'
+
+    vim.g.tagbar_width                     = 50
+    vim.g.tagbar_sort                      = 0
+    vim.g.tagbar_no_status_line            = 1
+    vim.g.tagbar_stl_verilog_systemverilog = true
 
     vim.g.tagbar_type_verilog_systemverilog = {
         ctagstype = 'SystemVerilog',
@@ -120,10 +140,10 @@ function M.config()                 -- Use config since it's not a LUA plugin
         "*******************************************
         "Following an Instance/Port
         "*******************************************
-        nnoremap <buffer> <leader>vis :VerilogGotoInstanceStart<CR>
-        nnoremap <buffer> <leader>vfi :VerilogFollowInstance<CR>
-        nnoremap <buffer> <leader>vri :VerilogReturnInstance<CR>
-        nnoremap <buffer> <leader>vfp :VerilogFollowPort<CR>
+"       nnoremap <buffer> <leader>vis :VerilogGotoInstanceStart<CR>
+"       nnoremap <buffer> <leader>vfi :VerilogFollowInstance<CR>
+"       nnoremap <buffer> <leader>vri :VerilogReturnInstance<CR>
+"       nnoremap <buffer> <leader>vfp :VerilogFollowPort<CR>
 
 
 
