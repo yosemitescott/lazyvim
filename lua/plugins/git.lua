@@ -6,7 +6,10 @@ return {
         keys = {
             { "<leader>gj", ":diffget //3<CR>", desc = "Git diff left side" },
             { "<leader>gf", ":diffget //2<CR>", desc = "Git diff right side" },
-            { "<leader>G", ":G<CR>", desc = "Git fugitive" },
+            { "<leader>gB", ":Git blame<CR>",   desc = "Git Blame via fugitive" },
+            { "<leader>gC", ":Git commit<CR>",  desc = "Git Commit via fugitive" },
+            { "<leader>gP", ":Git push<CR>",    desc = "Git push via fugitive" },
+            { "<leader>G",  ":G<CR>",           desc = "Git fugitive" },
         },
     },
 }

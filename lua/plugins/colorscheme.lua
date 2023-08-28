@@ -1,6 +1,5 @@
 return {
     "lunarvim/darkplus.nvim",
-    "gruvbox-community/gruvbox",
     "NLKNguyen/papercolor-theme",
     "navarasu/onedark.nvim", -- Theme inspired by Atom
     --  'shaunsingh/nord.nvim',
@@ -9,6 +8,15 @@ return {
     "rebelot/kanagawa.nvim",
     "edeneast/nightfox.nvim",
     "projekt0n/github-nvim-theme",
+    "xero/miasma.nvim",
+
+--  "gruvbox-community/gruvbox",
+    { "ellisonleao/gruvbox.nvim",
+        opts = {
+            contrast     = "hard",
+            dim_inactive = true,
+        },
+    },
 
     { "LazyVim/LazyVim", opts = {
         colorscheme = "gruvbox",

@@ -111,17 +111,24 @@ vim.api.nvim_create_autocmd({ "WinLeave", "FocusLost", "InsertEnter" }, {
     end,
 })
 
--- My Highlights
-vim.cmd("hi def link MyTodo Todo")
-vim.cmd("hi UVMF_HIGHLIGHT     guifg=#00d7af guibg=NONE guisp=NONE gui=bold ctermfg=43  ctermbg=NONE cterm=reverse")
-vim.cmd("hi UVMF_PRAGMA        guifg=#8787ff guibg=NONE guisp=NONE gui=bold ctermfg=105 ctermbg=NONE cterm=underline")
-vim.cmd("hi TrailingWhitespace ctermbg=red guibg=red")
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--   pattern  = { "*" },
+--   callback = function()
+--     vim.api.nvim_set_hl(0, "UVM_INFO", { link = "UVM_INFO_LINK"} )
+--   end,
+-- })
 
-vim.w.m1 = vim.fn.matchadd("TrailingWhitespace", "\\v\\s+$")
-vim.w.m1 = vim.fn.matchadd("Todo", "\\<SPF\\>")
---vim.w.m1 = vim.fn.matchadd("Todo",               '\\<NOTE\\>')
-vim.w.m1 = vim.fn.matchadd("UVMF_HIGHLIGHT", "\\<UVMF_CHANGE_ME\\>")
-vim.w.m1 = vim.fn.matchadd("UVMF_PRAGMA", "\\<pragma\\>")
+-- My Highlights
+--vim.cmd("hi def link MyTodo Todo")
+--vim.cmd("hi UVMF_HIGHLIGHT     guifg='#00d7af' guibg=NONE guisp=NONE gui=bold ctermfg=43  ctermbg=NONE cterm=reverse")
+--vim.cmd("hi UVM_INFO           guifg='#8787ff' guibg=NONE guisp=NONE gui=bold ctermfg=105 ctermbg=NONE cterm=underline")
+--vim.cmd("hi TrailingWhitespace ctermbg=red guibg=red")
+--
+--vim.w.m1 = vim.fn.matchadd("TrailingWhitespace", "\\v\\s+$")
+--vim.w.m1 = vim.fn.matchadd("Todo", "\\<SPF\\>")
+--vim.w.m1 = vim.fn.matchadd("UVMF_HIGHLIGHT", "\\<UVMF_CHANGE_ME\\>")
+--vim.w.m1 = vim.fn.matchadd("UVM_INFO", "UVM_INFO")
+----vim.w.m1 = vim.fn.matchadd("Todo",               '\\<NOTE\\>')
 
 -------------------------------------------
 -- Autocmds to rewrite

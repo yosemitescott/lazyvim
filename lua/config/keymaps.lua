@@ -9,6 +9,9 @@ local term_opts = { silent = true }
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
+vim.api.nvim_del_keymap("n", "<S-L>")
+vim.api.nvim_del_keymap("n", "<S-H>")
+
 --   --Remap space as leader key
 --   keymap("", "<Space>", "<Nop>", opts)
 
@@ -154,14 +157,8 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 --   ----------------------------------------------------------------------
 local wk = require("which-key")
 wk.register({
-    v = {
-        name = "+systemVerilog",
-    },
-}, { prefix = "<leader>", mode = "n" })
-
-wk.register({
     r = {
-        name = "+replace",
+        name = "+replace (Muren)",
     },
 }, { prefix = "<leader>", mode = "n" })
 
@@ -190,6 +187,7 @@ keymap("v", "<Leader>e:", [[:!align :<CR>]],        { noremap = true, silent = t
 keymap("v", "<Leader>e-", [[:!align \-<CR>]],       { noremap = true, silent = true, desc = "Align -" })
 keymap("v", "<Leader>e{", [[:!align {<CR>]],        { noremap = true, silent = true, desc = "Align {" })
 keymap("v", "<Leader>e}", [[:!align }<CR>]],        { noremap = true, silent = true, desc = "Align }" })
+keymap("v", "<Leader>e.", [[:!align .<CR>]],        { noremap = true, silent = true, desc = "Align ." })
 
 keymap("v", "<Leader>e1e", [[:!align -1<CR>]],      { noremap = true, silent = true, desc = "Align 1st Default" })
 keymap("v", "<Leader>e1)", [[:!align -1 \)<CR>]],   { noremap = true, silent = true, desc = "Align 1st )" })
@@ -201,6 +199,9 @@ keymap("v", "<Leader>e1/", [[:!align -1 //<CR>]],   { noremap = true, silent = t
 keymap("v", "<Leader>e1=", [[:!align -1 =<CR>]],    { noremap = true, silent = true, desc = "Align 1st =" })
 keymap("v", "<Leader>e1:", [[:!align -1 :<CR>]],    { noremap = true, silent = true, desc = "Align 1st :" })
 keymap("v", "<Leader>e1-", [[:!align -1 \-<CR>]],   { noremap = true, silent = true, desc = "Align 1st -" })
+keymap("v", "<Leader>e1{", [[:!align -1 {<CR>]],    { noremap = true, silent = true, desc = "Align 1st {" })
+keymap("v", "<Leader>e1}", [[:!align -1 }<CR>]],    { noremap = true, silent = true, desc = "Align 1st }" })
+keymap("v", "<Leader>e1.", [[:!align -1 .<CR>]],    { noremap = true, silent = true, desc = "Align 1st ." })
 
 keymap("v", "<Leader>eme", [[:!align -m<CR>]],      { noremap = true, silent = true, desc = "Align Min Default" })
 keymap("v", "<Leader>em)", [[:!align -m \)<CR>]],   { noremap = true, silent = true, desc = "Align Min )" })
@@ -212,10 +213,14 @@ keymap("v", "<Leader>em/", [[:!align -m //<CR>]],   { noremap = true, silent = t
 keymap("v", "<Leader>em=", [[:!align -m =<CR>]],    { noremap = true, silent = true, desc = "Align Min =" })
 keymap("v", "<Leader>em:", [[:!align -m :<CR>]],    { noremap = true, silent = true, desc = "Align Min :" })
 keymap("v", "<Leader>em-", [[:!align -m \-<CR>]],   { noremap = true, silent = true, desc = "Align Min -" })
+keymap("v", "<Leader>em{", [[:!align -m {<CR>]],    { noremap = true, silent = true, desc = "Align Min {" })
+keymap("v", "<Leader>em}", [[:!align -m }<CR>]],    { noremap = true, silent = true, desc = "Align Min }" })
+keymap("v", "<Leader>em.", [[:!align -m .<CR>]],    { noremap = true, silent = true, desc = "Align Min ." })
 
 keymap("v", "<Leader>eum", [[:!align " m_"<CR>]],   { noremap = true, silent = true, desc = "Align m_" })
 keymap("v", "<Leader>eu:", [[:!align ::<CR>]],      { noremap = true, silent = true, desc = "Align ::" })
 keymap("v", "<Leader>eut", [[:!align type<CR>]],    { noremap = true, silent = true, desc = "Align type" })
+keymap("v", "<Leader>euT", [[:!align this<CR>]],    { noremap = true, silent = true, desc = "Align this" })
 
 --   ----------------------------------------------------------------------
 --   -- Save to temp files - Leader f is the file group

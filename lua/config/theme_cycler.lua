@@ -1,9 +1,10 @@
 local function theme_cycler(step)
     MyThemeState  = 0
     local themes = {
-        "catppuccin-mocha",
         "gruvbox",
+        "everforest",
         "PaperColor",
+        "catppuccin-mocha",
         "catppuccin-frappe",
         "catppuccin-macchiato",
         "catppuccin",
@@ -30,6 +31,7 @@ local function theme_cycler(step)
         "github_dark_high_contrast",
         "github_dark_tritanopia",
         "github_dimmed",
+        "miasma",
     }
     return function ()
         if (step == 1) then

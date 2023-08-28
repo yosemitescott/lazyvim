@@ -362,7 +362,7 @@ local sv_do_while = s(
                 begin
                     {body}
                 end
-            while ( {control} )
+            while ( {control} );
 
         ]],
         {
