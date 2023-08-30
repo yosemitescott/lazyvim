@@ -26,14 +26,14 @@ function M.opts()
     dashboard.section.buttons.val = {
         dashboard.button("f", " " .. " Find file",                     ":Telescope find_files <CR>"),
         dashboard.button("n", " " .. " New file",                      ":ene <BAR> startinsert <CR>"),
-        dashboard.button("r", " " .. " Recent files via telescope",    ":Telescope oldfiles <CR>"),
+        dashboard.button("r", "󰄉  " .. " Recent files via telescope",    ":Telescope oldfiles <CR>"),
         dashboard.button("p", " " .. " Find project via telescope",    ":lua require('telescope').extensions.projects.projects()<CR>"),
         dashboard.button("g", " " .. " Find text via telescope",       ":Telescope live_grep <CR>"),
 --      dashboard.button("c", " " .. " Config",                        ":e $MYVIMRC <CR>"),
         dashboard.button("c", " " .. " Config",                        ":Neotree ~/.config/nvim/lua <CR>"),
         dashboard.button("e", "󰂥 " .. " File Explore",                  ":Neotree <CR>"),
-        dashboard.button("s", "勒" .. " Restore Session",               [[:lua require("persistence").load() <cr>]]),
-        dashboard.button("l", "鈴" .. " Lazy",                          ":Lazy<CR>"),
+        dashboard.button("s", "󰑓 " .. " Restore Session",               [[:lua require("persistence").load() <cr>]]),
+        dashboard.button("l", "󰒲 " .. " Lazy",                          ":Lazy<CR>"),
         dashboard.button("q", " " .. " Quit",                          ":qa<CR>"),
     }
     for _, button in ipairs(dashboard.section.buttons.val) do
