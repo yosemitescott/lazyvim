@@ -1,3 +1,4 @@
+if true then return {} end
 local M = {
     "goolord/alpha-nvim",
     event = "VimEnter",

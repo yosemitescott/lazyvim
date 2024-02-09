@@ -6,6 +6,8 @@
 --
 --
 
+vim.g.autoformat = false
+
 local options = {
     backup             = false,         -- creates a backup file
 

@@ -5,7 +5,7 @@ return {
     opts = function(_, opts)
         local ft = require "Comment.ft"
         --------------------------------------------------------------------
-        --              Filetype                    Line      Block
+        --      Filetype                    Line      Block
         --------------------------------------------------------------------
         ft.set("lua",                   { "--%s" , "--[[%s]]" })
         ft.set("verilog_systemverilog", { "// %s", "/*%s*/"   })

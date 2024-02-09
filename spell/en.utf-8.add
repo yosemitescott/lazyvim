@@ -1,0 +1,29 @@
+deasserting
+SPI
+UVM
+DUT
+Questa
+Testbench
+testbench
+I2C
+req
+rsp
+BVM
+MDIO
+ITAR
+bvm
+config
+vif
+mdio
+typedefs
+RMII
+loopback
+tx
+rx
+rmii
+csr
+AHB
+ahb
+SystemVerilog
+page_id == GPIO_PAGE
+Source setup.env

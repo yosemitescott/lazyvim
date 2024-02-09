@@ -77,7 +77,7 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
     callback = function()
         vim.cmd("hi link illuminatedWord LspReferenceText")
-        require("lazyvim.plugins.lsp.format").autoformat = false
+--      require("lazyvim.plugins.lsp.format").autoformat = false
     end,
 })
 

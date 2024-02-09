@@ -29,7 +29,7 @@ require("lazy").setup({
         lazy = false,
         -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
         -- have outdated releases, which may break your Neovim install.
-        version = false, -- always use the latest git commit
+        version = nil, -- false, -- always use the latest git commit
         -- version = "*", -- try installing the latest stable version for plugins that support semver
     },
     install = { colorscheme = { "tokyonight", "habamax" } },
@@ -48,5 +48,8 @@ require("lazy").setup({
                 "zipPlugin",
             },
         },
+    },
+    ui = {
+        border = "solid",   -- rounded
     },
 })

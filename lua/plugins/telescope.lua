@@ -1,3 +1,5 @@
+-- if true then return {} end
+
 return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -5,13 +7,15 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         "nvim-telescope/telescope-live-grep-args.nvim",
         "molecule-man/telescope-menufacture",
-        --      "tsakirist/telescope-lazy.nvim",
-        --      "telescope-file-browser.nvim",
+        "tsakirist/telescope-lazy.nvim",
+        "nvim-telescope/telescope-file-browser.nvim",
         build = "make",
         config = function()
             require("telescope").load_extension("fzf")
-            --    require("telescope").load_extension("live_grep_args")
             require("telescope").load_extension("menufacture")
+            require("telescope").load_extension("ui-select")
+            require("telescope").load_extension("noice")
+            --    require("telescope").load_extension("live_grep_args")
         end,
     },
     opts = {
@@ -31,9 +35,24 @@ return {
             desc = "Find Plugin File",
         },
         {
+            "<leader>fl",
+            "<cmd>Telescope lazy<CR>",
+            desc = "Find Lazy Plugins",
+        },
+        {
             "<leader>fg",
             "<cmd>Telescope live_grep<CR>",
             desc = "Live Grep",
+        },
+        {
+            "<leader>sl",
+            "<cmd>Telescope lsp_document_symbols<CR>",
+            desc = "Telescope LSP Symbols",
+        },
+        {
+            "<leader>sn",
+            "<cmd>Telescope noice<CR>",
+            desc = "Search Noice messages",
         },
         {
             "<leader>gb",
@@ -42,8 +61,8 @@ return {
         },
         {
             "<leader>8",
-            --    "<cmd>Telescope grep_string<CR>",
-            "<cmd>lua require('telescope').extensions.menufacture.grep_string()<CR>",
+            "<cmd>Telescope grep_string<CR>",
+            --"<cmd>lua require('telescope').extensions.menufacture.grep_string()<CR>",
             desc = "Grep Word Under Cursor - ctrl-6 to change",
         },
         --  {
@@ -67,4 +86,33 @@ return {
             desc = "Live Grep - ctrl-6 to change",
         },
     },
+
+--  {
+--      "nvim-telescope/telescope-ui-select.nvim",
+--      config = function()
+--          require("telescope").setup {
+--              extensions = {
+--                  ["ui-select"] = {
+--                      require("telescope.themes").get_dropdown {
+--                          -- even more opts
+--                      }
+--
+--                      -- pseudo code / specification for writing custom displays, like the one
+--                      -- for "codeactions"
+--                      -- specific_opts = {
+--                      --   [kind] = {
+--                      --     make_indexed = function(items) -> indexed_items, width,
+--                      --     make_displayer = function(widths) -> displayer
+--                      --     make_display = function(displayer) -> function(e)
+--                      --     make_ordinal = function(e) -> string
+--                      --   },
+--                      --   -- for example to disable the custom builtin "codeactions" display
+--                      --      do the following
+--                      --   codeactions = false,
+--                      -- }
+--                  },
+--              },
+--          }
+--      end,
+--  },
 }

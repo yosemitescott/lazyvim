@@ -2,9 +2,7 @@ return {
     -- Git related plugins
     --  {'tpope/vim-sleuth'},                    -- Detect tabstop and shiftwidth automatically
     { "will133/vim-dirdiff" }, -- Run a diff on 2 directories.
-    { "neovim/nvim-lspconfig", opts = {
-        autoformat = false,
-    } }, -- Run a diff on 2 directories.
+--  {"miversen33/sunglasses.nvim", config = true},
 }
 
 --  -- Misc

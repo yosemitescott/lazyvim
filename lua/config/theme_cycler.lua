@@ -1,6 +1,11 @@
 local function theme_cycler(step)
     MyThemeState  = 0
     local themes = {
+        "nightfox",
+        "carbonfox",
+        "nordfox",
+        "duskfox",
+        "terafox",
         "gruvbox",
         "everforest",
         "PaperColor",
@@ -15,11 +20,6 @@ local function theme_cycler(step)
         "kanagawa-wave",
         "kanagawa-dragon",
         "kanagawa-lotus",
-        "nightfox",
-        "carbonfox",
-        "nordfox",
-        "duskfox",
-        "terafox",
         "onedark",
         "onenord",
         "nord",

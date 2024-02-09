@@ -12,6 +12,12 @@ return {
             { "<leader>G",  ":G<CR>",           desc = "Git fugitive" },
         },
     },
+    { "lewis6991/gitsigns.nvim",
+        keys = {
+            { "<leader>gp", ":Gitsigns preview_hunk<CR>",              desc = "Gitsigns preview hunk in window" },
+            { "<leader>gt", ":Gitsigns toggle_current_line_blame<CR>", desc = "Gitsigns Toggle Current Line Blame" },
+        }
+    },
 }
 
 -- GIT

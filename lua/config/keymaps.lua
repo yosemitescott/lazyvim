@@ -9,8 +9,16 @@ local term_opts = { silent = true }
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
-vim.api.nvim_del_keymap("n", "<S-L>")
-vim.api.nvim_del_keymap("n", "<S-H>")
+-- Delete default keymaps
+-- vim.api.nvim_del_keymap("n", "<S-L>")
+-- vim.api.nvim_del_keymap("n", "<S-H>")
+-- vim.api.nvim_del_keymap("n", "gt")
+-- vim.api.nvim_del_keymap("n", "gT")
+
+vim.keymap.del("n", "<S-L>")
+vim.keymap.del("n", "<S-H>")
+--vim.keymap.del("n", "gt")
+--vim.keymap.del("n", "gT")
 
 --   --Remap space as leader key
 --   keymap("", "<Space>", "<Nop>", opts)
@@ -62,7 +70,7 @@ keymap("n", "N", "Nzzzv", opts)
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", { noremap = true, silent = true, desc = "Close/Delete Buffer" })
 
 -- Delete Trailing Whitespace
-keymap("n", "<leader>cc", [[:%s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code" })
+keymap("n", "<leader>cc", [[mr:%s/\s\+$//e<cr>`r]], { noremap = true, silent = true, desc = "Clean Up Code" })
 keymap(
     "n",
     "<leader>cC",
@@ -71,6 +79,10 @@ keymap(
 )
 
 keymap("n", "<leader>c=", [[gg=G]], { noremap = true, silent = true, desc = "Reformat all lines" })
+
+-- Remove Color codes from UVM Logs
+--keymap("n", "<leader>cu", "<cmd>%s/[[0-9;]*m//g<cr>", { noremap = true, silent = true, desc = "Clean Up UVM color codes" })
+keymap("n", "<leader>cu", [[mr:%s/<C-v><esc>[[0-9;]\{2,}m//g<cr>`r]], { noremap = true, silent = true, desc = "Clean Up UVM color codes" })
 
 --   command = [[%s/\s\+$//e]],
 
@@ -87,6 +99,7 @@ keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", { noremap = true, silent = true, des
 -- Press * to search for the term under the cursor or in a visual selection and
 -- then press a key below to replace all instances of it in the current file.
 keymap("n", "<leader>s*", ":%s/<C-r><C-w>/", { noremap = true, silent = true, desc = "Search/Replace Dialogue" })
+keymap("n", "<leader>s8", ":%s/\\<<C-r><C-w>\\>/", { noremap = true, silent = true, desc = "Search/Replace Dialogue Boundary" })
 
 --   -- Behave VIM
 --   keymap('n', 'Y', "y$", opts)
@@ -188,6 +201,7 @@ keymap("v", "<Leader>e-", [[:!align \-<CR>]],       { noremap = true, silent = t
 keymap("v", "<Leader>e{", [[:!align {<CR>]],        { noremap = true, silent = true, desc = "Align {" })
 keymap("v", "<Leader>e}", [[:!align }<CR>]],        { noremap = true, silent = true, desc = "Align }" })
 keymap("v", "<Leader>e.", [[:!align .<CR>]],        { noremap = true, silent = true, desc = "Align ." })
+keymap("v", "<Leader>e,", [[:!align ,<CR>]],        { noremap = true, silent = true, desc = "Align ," })
 
 keymap("v", "<Leader>e1e", [[:!align -1<CR>]],      { noremap = true, silent = true, desc = "Align 1st Default" })
 keymap("v", "<Leader>e1)", [[:!align -1 \)<CR>]],   { noremap = true, silent = true, desc = "Align 1st )" })
@@ -225,12 +239,34 @@ keymap("v", "<Leader>euT", [[:!align this<CR>]],    { noremap = true, silent = t
 --   ----------------------------------------------------------------------
 --   -- Save to temp files - Leader f is the file group
 --   ----------------------------------------------------------------------
-keymap( "v", "<Leader>fa", [[:w! $HOME/.config/nvim/files/tempa<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File a" })
-keymap( "v", "<Leader>fb", [[:w! $HOME/.config/nvim/files/tempb<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File b" })
-keymap( "v", "<Leader>fc", [[:w! $HOME/.config/nvim/files/tempc<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File c" })
-keymap( "v", "<Leader>fA", [[:w >> $HOME/.config/nvim/files/tempa<CR>]], { noremap = true, silent = true, desc = "Append to Temp File a" })
-keymap( "v", "<Leader>fB", [[:w >> $HOME/.config/nvim/files/tempb<CR>]], { noremap = true, silent = true, desc = "Append to Temp File b" })
-keymap( "v", "<Leader>fC", [[:w >> $HOME/.config/nvim/files/tempc<CR>]], { noremap = true, silent = true, desc = "Append to Temp File c" })
-keymap( "n", "<Leader>fa", [[:r $HOME/.config/nvim/files/tempa<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File a" })
-keymap( "n", "<Leader>fb", [[:r $HOME/.config/nvim/files/tempb<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File b" })
-keymap( "n", "<Leader>fc", [[:r $HOME/.config/nvim/files/tempc<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File c" })
+wk.register({
+    j = {
+        name = "+temp file fun",
+    },
+}, { prefix = "<leader>", mode = "n" })
+
+keymap( "v", "<Leader>ja", [[:w! $HOME/.config/nvim/files/tempa<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File a" })
+keymap( "v", "<Leader>jb", [[:w! $HOME/.config/nvim/files/tempb<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File b" })
+keymap( "v", "<Leader>jc", [[:w! $HOME/.config/nvim/files/tempc<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File c" })
+keymap( "v", "<Leader>jA", [[:w >> $HOME/.config/nvim/files/tempa<CR>]], { noremap = true, silent = true, desc = "Append to Temp File a" })
+keymap( "v", "<Leader>jB", [[:w >> $HOME/.config/nvim/files/tempb<CR>]], { noremap = true, silent = true, desc = "Append to Temp File b" })
+keymap( "v", "<Leader>jC", [[:w >> $HOME/.config/nvim/files/tempc<CR>]], { noremap = true, silent = true, desc = "Append to Temp File c" })
+keymap( "n", "<Leader>ja", [[:r $HOME/.config/nvim/files/tempa<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File a" })
+keymap( "n", "<Leader>jb", [[:r $HOME/.config/nvim/files/tempb<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File b" })
+keymap( "n", "<Leader>jc", [[:r $HOME/.config/nvim/files/tempc<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File c" })
+
+--   ----------------------------------------------------------------------
+--   diff options
+--   ----------------------------------------------------------------------
+wk.register({
+    d = {
+        name = "+diff",
+    },
+}, { prefix = "<leader>", mode = "n" })
+
+keymap("n", "<Leader>dw", "<cmd>set diffopt+=iwhiteall<CR>",      { noremap = true, silent = true, desc = "Add ignore all whitespace" })
+keymap("n", "<Leader>dW", "<cmd>set diffopt-=iwhiteall<CR>",      { noremap = true, silent = true, desc = "Remove ignore all whitespace" })
+keymap("n", "<Leader>dc", "<cmd>set diffopt+=icase<CR>",          { noremap = true, silent = true, desc = "Add ignore case" })
+keymap("n", "<Leader>dC", "<cmd>set diffopt-=icase<CR>",          { noremap = true, silent = true, desc = "Remove ignore case" })
+keymap("n", "<Leader>db", "<cmd>set diffopt+=iblank<CR>",         { noremap = true, silent = true, desc = "Add ignore blank" })
+keymap("n", "<Leader>dB", "<cmd>set diffopt-=iblank<CR>",         { noremap = true, silent = true, desc = "Remove ignore blank" })
