@@ -25,9 +25,11 @@ local M = {
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
     },
     init = function()
-        vim.opt_local['smartindent'] = false
-        vim.opt_local['autoindent']  = true
+--      vim.opt_local['smartindent'] = false
+--      vim.opt_local['autoindent']  = true
         vim.opt.foldmethod  = "syntax"
+        vim.o.autoindent  = true
+        vim.o.smartindent = false
 
         vim.g.verilog_disable_indent_lst         = "eos"
         vim.g.verilog_syntax_fold_lst            = "comment"

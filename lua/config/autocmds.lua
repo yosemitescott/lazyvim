@@ -84,7 +84,8 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
     callback = function()
         local line_count = vim.api.nvim_buf_line_count(0)
-        if line_count >= 5000 then
+        local isLoaded   = package.loaded["vim-illuminate"] ~= nil
+        if line_count >= 5000 and isLoaded then
             vim.cmd("IlluminatePauseBuf")
         end
     end,
