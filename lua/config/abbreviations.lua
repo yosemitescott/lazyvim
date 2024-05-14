@@ -1,10 +1,3 @@
---vim.keymap.set('ca', 'rep', '. !rep')   Eventually this might work in a future version of nvim
+vim.keymap.set('c', 'rep', '. !rep')
+vim.keymap.set('c', 'vsp', 'vert sb')
 
-vim.cmd([[
-
-    "*******************************************
-    "Abbreviations and key mappings
-    "*******************************************
-    cab rep . !rep
-
-]])

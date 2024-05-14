@@ -70,15 +70,10 @@ keymap("n", "N", "Nzzzv", opts)
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", { noremap = true, silent = true, desc = "Close/Delete Buffer" })
 
 -- Delete Trailing Whitespace
-keymap("n", "<leader>cc", [[mr:%s/\s\+$//e<cr>`r]], { noremap = true, silent = true, desc = "Clean Up Code" })
-keymap(
-    "n",
-    "<leader>cC",
-    [[:bufdo %s/\s\+$//e<cr>]],
-    { noremap = true, silent = true, desc = "Clean Up Code - All buffers" }
-)
-
-keymap("n", "<leader>c=", [[gg=G]], { noremap = true, silent = true, desc = "Reformat all lines" })
+keymap("n", "<leader>cc", [[mr:%s/\s\+$//e<cr>`r]],   { noremap = true, silent = true, desc = "Clean Up Code" })
+keymap("n", "<leader>cC", [[:bufdo %s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code - All buffers" })
+keymap("n", "<leader>c=", [[gg=G]],                   { noremap = true, silent = true, desc = "Reformat all lines" })
+keymap("n", "<leader>cp", [[:ProjectRoot]],           { noremap = true, silent = true, desc = "add Project" })
 
 -- Remove Color codes from UVM Logs
 --keymap("n", "<leader>cu", "<cmd>%s/[[0-9;]*m//g<cr>", { noremap = true, silent = true, desc = "Clean Up UVM color codes" })

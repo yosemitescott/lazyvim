@@ -24,6 +24,9 @@ return {
             layout_config = { prompt_position = "top" },
             sorting_strategy = "ascending",
             winblend = 0,
+            file_ignore_patterns = {
+                "tags",
+            },
         },
     },
     keys = {
@@ -33,6 +36,16 @@ return {
             "<leader>fP",
             function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
             desc = "Find Plugin File",
+        },
+--      {
+--          "<leader>sf",
+--          function() require("telescope.builtin").find_files({'fd', vim.fn.expand("<cword>")}) end,
+--          desc = "Search File under cursor",
+--      },
+        {
+            "<leader>sf",
+            function() require("telescope.builtin").find_files({find_command={'fd', vim.fn.expand("<cword>")}}) end,
+            desc = "Search File under cursor",
         },
         {
             "<leader>fl",

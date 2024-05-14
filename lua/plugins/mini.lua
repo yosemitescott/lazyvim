@@ -1,8 +1,16 @@
 return {
-    { "echasnovski/mini.comment",    enabled = false },
     { "echasnovski/mini.pairs",      enabled = false },
-    { "echasnovski/mini.align",      config  = function(_, opts) require("mini.align").    setup(opts) end, },
-    { "echasnovski/mini.bracketed",  config  = function(_, opts) require("mini.bracketed").setup(opts) end, },
+    { "echasnovski/mini.comment",    enabled = false },
+    { "echasnovski/mini.align",      config  = true, },
+    { "echasnovski/mini.bracketed",  config  = true, },
+
+--  { "echasnovski/mini.comment",
+--      opts  = { options = {
+--                              start_of_line = true,
+--                          },
+--      },
+--  },
+--  { "echasnovski/mini.align",      config  = function(_, opts) require("mini.align").    setup(opts) end, },
     --  {"echasnovski/mini.nvim", version = false },
 
 --        {
@@ -11,7 +19,7 @@ return {
 --            event   = { "BufReadPre", "BufNewFile" },
 --            opts    = function()
 --                        local hi = require("mini.hipatterns")
---    
+--
 --                        local words_bg = {
 --                                SPF         = '#ff00ff',
 --                                UVM_ERROR   = '#ff0000',
@@ -20,7 +28,7 @@ return {
 --                                UVM_WARNING = '#ffff00',
 --    --                          blue        = '#0000ff',
 --                        }
---    
+--
 --     ---                local words_line = {
 --     ---                        SPF         = '#ff00ff',
 --     ---                        UVM_ERROR   = '#ff0000',
@@ -34,13 +42,13 @@ return {
 --                            if hex == nil then return nil end
 --                            return MiniHipatterns.compute_hex_color_group(hex, 'bg')
 --                        end
---    
+--
 --    --                  local word_color_group_line = function(_, match)
 --    --                      local hex = words_line[match]
 --    --                      if hex == nil then return nil end
 --    --                      return MiniHipatterns.compute_hex_color_group(hex, 'line')
 --    --                  end
---    
+--
 --                        return {
 --                            verilog = {
 --                                enabled = true,
@@ -53,20 +61,20 @@ return {
 --                                hack  = { pattern = "%f[%w]()HACK()%f[%W]",                group = "MiniHipatternsHack"  },
 --                                todo  = { pattern = "%f[%w]()TODO()%f[%W]",                group = "MiniHipatternsTodo"  },
 --                                note  = { pattern = "%f[%w]()NOTE()%f[%W]",                group = "MiniHipatternsNote"  },
---    
+--
 --                                -- My patterns
 --    --                          spf          = { pattern = '%f[%w]()SPF()%f[%W]' ,         group = 'TODO'                },
 --    --                          uvm_error    = { pattern = '%f[%w]()UVM_ERROR()%f[%W]',    group = 'MiniHipatternsFixme' },
 --    --                          uvm_fatal    = { pattern = '%f[%w]()UVM_FATAL()%f[%W]',    group = 'MiniHipatternsFixme' },
 --    --                          uvm_warning  = { pattern = '%f[%w]()UVM_WARNING()%f[%W]',  group = 'MiniHipatternsHack'  },
 --                                uvm_info     = { pattern = '%f[%w]()UVM_INFO()%f[%W]',     group = 'MiniHipatternsNote'  },
---    
+--
 --                                word_color_bg = { pattern = '%S+', group = word_color_group_bg },
 --    --                          word_color_line = { pattern = '%S+', group = word_color_group_line },
---    
+--
 --                                -- Highlight hex color strings (`#rrggbb`) using that color
 --                                hex_color = hi.gen_highlighter.hex_color({ style = "bg", priority = 2000 }),
---    
+--
 --     --                         hex_color_line = hi.gen_highlighter.hex_color { style = "line", priority = 2000 },
 --                            },
 --                        }

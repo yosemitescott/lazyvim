@@ -1,9 +1,15 @@
+-- if true then return {} end
 
 return {
     "numToStr/Comment.nvim",
     event = "BufReadPost",
     opts = function(_, opts)
         local ft = require "Comment.ft"
+--      local U = require("Comment.utils")
+--
+--      pre_hook = function(ctx)
+--                      U.range.scol = 5
+--                  end,
         --------------------------------------------------------------------
         --      Filetype                    Line      Block
         --------------------------------------------------------------------

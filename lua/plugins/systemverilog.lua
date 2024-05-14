@@ -8,16 +8,22 @@ wk.register({
 local M = {
     'vhda/verilog_systemverilog.vim',
     dependencies = {
+        'pechorin/any-jump.vim',
         'preservim/tagbar',
     },
     ft   = {"verilog", "verilog_systemverilog", "systemverilog"},
     keys = {
 
+        { "<leader>vj", "<cmd>AnyJump<CR>",                                              desc = "Jump Tag" },
+        { "<leader>vJ", "<cmd>AnyJumpBack<CR>",                                          desc = "Jump Back" },
+
+        { "<leader>vc", "0R//0",                                                       desc = "Comment out line" },
         { "<leader>vs", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
         { "<leader>vi", "<cmd>VerilogFollowInstance<CR>",                                desc = "follow Instance start" },
         { "<leader>vr", "<cmd>VerilogReturnInstance<CR>",                                desc = "Return instance" },
         { "<leader>vp", "<cmd>VerilogFollowPort<CR>",                                    desc = "follow Port" },
-        { "<leader>vt", "<cmd>TagbarToggle<CR>",                                         desc = "Toggle Tagbar" },
+        { "<leader>vT", "<cmd>TagbarToggle<CR>",                                         desc = "Toggle Tagbar" },
+        { "<Leader>vt", "<cmd>lua ToggleColorColumn()<CR>",                              desc = "Toggle Color Column" },
         { "<leader>vf", "<cmd>VerilogFoldingRemove comment<CR> <BAR><cmd>foldopen!<CR>", desc = "Remove comment Folding" },
         { "<leader>vF", "<cmd>VerilogFoldingAdd comment<CR>",                            desc = "Add comment Folding" },
         { "<Leader>vb", "<cmd>lua ToggleBlockAlign()<CR>",                               desc = "Toggle Block Alignment" },
@@ -27,9 +33,17 @@ local M = {
     init = function()
 --      vim.opt_local['smartindent'] = false
 --      vim.opt_local['autoindent']  = true
+        -- example of path
+        --      vim.opt_local.path:prepend(vim.fn.stdpath('config')..'/lua')
+        --
+        vim.g.any_jump_disable_default_keybindings = 1
+
         vim.opt.foldmethod  = "syntax"
+        vim.opt.suffixesadd  = ".sv,.svh"
+        vim.opt.path:append "./env/**, ./tests/**"
         vim.o.autoindent  = true
         vim.o.smartindent = false
+--      vim.o.colorcolumn = "139"
 
         vim.g.verilog_disable_indent_lst         = "eos"
         vim.g.verilog_syntax_fold_lst            = "comment"
@@ -65,6 +79,14 @@ function M.config()                 -- Use config since it's not a LUA plugin
         else
             vim.b.verilog_indent_block_on_keyword = nil
             vim.notify("Block Indent is off... BOO!")
+        end
+    end
+
+    ToggleColorColumn = function()
+        if (vim.o.colorcolumn == "") then
+            vim.o.colorcolumn = "139"
+        else
+            vim.o.colorcolumn = ""
         end
     end
 

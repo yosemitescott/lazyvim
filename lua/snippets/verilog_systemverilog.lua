@@ -8,8 +8,9 @@ local c = ls.choice_node
 local f = ls.function_node
 local sn = ls.snippet_node
 
-local fmt = require("luasnip.extras.fmt").fmt
-local rep = require("luasnip.extras").rep
+local fmta = require("luasnip.extras.fmt").fmta
+local fmt  = require("luasnip.extras.fmt").fmt
+local rep  = require("luasnip.extras").rep
 
 local snippets, autosnippets = {}, {} --}}}
 
@@ -79,6 +80,11 @@ local myFirstSnippet = s("myFirstSnippet", {
 })
 table.insert(snippets, myFirstSnippet)
 
+local my_info = s("myinfo", {
+    t("Author: Scott Follmer (sfollmer@blueorigin.com)"),
+})
+table.insert(snippets, my_info)
+
 --------------------------------------------------------------------
 -- Function to return the current filename
 --------------------------------------------------------------------
@@ -88,6 +94,17 @@ local filename = function()
         return name[1] .. "::" or ""
     end)
 end
+
+--------------------------------------------------------------------
+-- Function to return the current filename
+--------------------------------------------------------------------
+--local uvm_header_description = function()
+--    return f(function(_args, snip)
+--        local cases = {
+--        ["
+--        return name[1] .. "::" or ""
+--    end)
+--end
 
 --------------------------------------------------------------------
 -- Function to return the comment string
@@ -109,12 +126,24 @@ local sv_function = s(
     "fun",
     fmt(
         [[ 
-                function {} {}{}({});
-                    {}
-                endfunction : {}
-
-                ]],
+        //------------------------------------------------------------------------------
+        // Function : {}
+        // {}
+        //
+        // Parameters:
+        // {}
+        // TODO: Complete function arguments
+        //
+        //------------------------------------------------------------------------------
+        function {} {}{}({});
+            {}
+        endfunction : {}
+        {}
+        ]],
         {
+            rep(3),
+            i(6, " TODO: Function Description"),
+            rep(4),
             c(1, {
                 t("void"),
                 t("int"),
@@ -129,6 +158,7 @@ local sv_function = s(
             i(4, "myArgs"),
             i(5, "// TODO"),
             rep(3),
+            i(0)
         }
     )
 )
@@ -182,12 +212,25 @@ local sv_task = s(
     "task",
     fmt(
         [[ 
+        //------------------------------------------------------------------------------
+        // Task : {}
+        // {}
+        //
+        // Parameters:
+        // {}
+        // TODO: Complete task arguments
+        //
+        //------------------------------------------------------------------------------
         task {}{}({});
             {}
         endtask : {}
 
+        {}
         ]],
         {
+            rep(2),
+            i(5, " TODO: Task Description"),
+            rep(3),
             c(1, {
                 filename(),
                 t(""),
@@ -196,6 +239,7 @@ local sv_task = s(
             i(3, "myArgs"),
             i(4, "// TODO"),
             rep(2),
+            i(0),
         }
     )
 )
@@ -418,8 +462,8 @@ local uvm_info = s(
         ]],
         {
             c(1, {
-                t("get_type_name()"),
                 t("get_name()"),
+                t("get_type_name()"),
                 t('"SPF"'),
                 sn(
                     1,
@@ -483,11 +527,12 @@ local uvm_error = s(
         {
             c(1, {
                 t("uvm_error"),
+                t("uvm_warning"),
                 t("uvm_fatal"),
             }),
             c(2, {
-                t("get_type_name()"),
                 t("get_name()"),
+                t("get_type_name()"),
                 t('"SPF"'),
                 sn(
                     1,
@@ -721,5 +766,10 @@ local myFirstAutoSnippet = s("dude", { t("This was auto triggered") })
 -- local myFirstAutoSnippet = s("dude", f(comment_string()))
 
 table.insert(autosnippets, myFirstAutoSnippet) -- autosnippets is the key word
+
+-- autosnippet(
+--     "myinfo", 
+--     { t("Author: Scott Follmer (sfollmer@blueorigin.com)") }
+-- )
 
 return snippets, autosnippets

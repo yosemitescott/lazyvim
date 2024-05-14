@@ -32,6 +32,7 @@ local function theme_cycler(step)
         "github_dark_tritanopia",
         "github_dimmed",
         "miasma",
+        "rose-pine",
     }
     return function ()
         if (step == 1) then
