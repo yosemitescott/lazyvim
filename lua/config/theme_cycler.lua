@@ -46,5 +46,5 @@ local function theme_cycler(step)
     end
 end
 
-vim.keymap.set("n", "#7", theme_cycler(0))
-vim.keymap.set("n", "#8", theme_cycler(1))
+vim.keymap.set("n", "<F7>", theme_cycler(0))
+vim.keymap.set("n", "<F8>", theme_cycler(1))

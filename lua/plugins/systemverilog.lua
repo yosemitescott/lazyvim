@@ -1,9 +1,4 @@
-local wk = require("which-key")
-wk.register({
-    v = {
-        name = "+systemVerilog",
-    },
-}, { prefix = "<leader>", mode = "n" })
+-- if true then return {} end
 
 local M = {
     'vhda/verilog_systemverilog.vim',
@@ -13,10 +8,9 @@ local M = {
     },
     ft   = {"verilog", "verilog_systemverilog", "systemverilog"},
     keys = {
-
+        { "<leader>v",  group = "+systemverilog" },
         { "<leader>vj", "<cmd>AnyJump<CR>",                                              desc = "Jump Tag" },
         { "<leader>vJ", "<cmd>AnyJumpBack<CR>",                                          desc = "Jump Back" },
-
         { "<leader>vc", "0R//0",                                                       desc = "Comment out line" },
         { "<leader>vs", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
         { "<leader>vi", "<cmd>VerilogFollowInstance<CR>",                                desc = "follow Instance start" },
@@ -36,6 +30,11 @@ local M = {
         -- example of path
         --      vim.opt_local.path:prepend(vim.fn.stdpath('config')..'/lua')
         --
+        local wk = require("which-key")
+        wk.add({
+            { "<leader>v", group = "+systemverilog" },
+        })
+
         vim.g.any_jump_disable_default_keybindings = 1
 
         vim.opt.foldmethod  = "syntax"
@@ -43,10 +42,12 @@ local M = {
         vim.opt.path:append "./env/**, ./tests/**"
         vim.o.autoindent  = true
         vim.o.smartindent = false
+        vim.b.commentstring = "//"
 --      vim.o.colorcolumn = "139"
 
         vim.g.verilog_disable_indent_lst         = "eos"
         vim.g.verilog_syntax_fold_lst            = "comment"
+        vim.g.verilog_efm_uvm_lst                = "all"
         vim.g.tagbar_width                       = 50
         vim.g.tagbar_sort                        = 0
         vim.g.tagbar_no_status_line              = 1
@@ -54,6 +55,7 @@ local M = {
         vim.b.verilog_indent_width               = 4
         vim.g.verilog_disable_constant_highlight = 1
         vim.b.verilog_indent_block_on_keyword    = 1
+--      vim.g.verilog_verbose                    = true
         vim.lsp.set_log_level("info")
 
 --      vim.g.verilog_instance_skip_last_coma    = 1

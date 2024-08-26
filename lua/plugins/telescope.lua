@@ -98,6 +98,16 @@ return {
             "<cmd>lua require('telescope').extensions.menufacture.live_grep()<CR>",
             desc = "Live Grep - ctrl-6 to change",
         },
+        {
+            "<leader>fu",
+            "<cmd>lua require('telescope').extensions.menufacture.oldfiles()<CR>",
+            desc = "Old Files - ctrl-6 to change",
+        },
+        {
+            "<leader>vv",
+            "<cmd>lua require('telescope').extensions.menufacture.live_grep() type_filter=verilog<CR>",
+            desc = "Live Grep - verilog - ctrl-6 to change",
+        },
     },
 
 --  {

@@ -9,6 +9,8 @@ local term_opts = { silent = true }
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
+local wk = require("which-key")
+
 -- Delete default keymaps
 -- vim.api.nvim_del_keymap("n", "<S-L>")
 -- vim.api.nvim_del_keymap("n", "<S-H>")
@@ -99,11 +101,18 @@ keymap("n", "<leader>s8", ":%s/\\<<C-r><C-w>\\>/", { noremap = true, silent = tr
 --   -- Behave VIM
 --   keymap('n', 'Y', "y$", opts)
 
--- Run Macro mappings - # stands for F (i.e. #2 is <F2>)
-vim.keymap.set("n", "#2", "@a")
-vim.keymap.set("n", "#3", "@b")
-vim.keymap.set("n", "#4", "@c")
-vim.keymap.set("n", "#5", "@d")
+-- Run Macro mappings
+vim.keymap.set("n", "<F2>", "@a")
+vim.keymap.set("n", "<F3>", "@b")
+vim.keymap.set("n", "<F4>", "@c")
+vim.keymap.set("n", "<F5>", "@d")
+
+-- Yank 
+wk.add({
+    { "<leader>y", '"+y', mode = { "v"}, desc = "Yank to System Clipboard" },
+    { "<leader>y", '"+p', mode = { "n"}, desc = "Paste from System Clipboard" },
+})
+
 
 --   ----------------------------------------------------------------------
 --   -- Insert --
@@ -163,105 +172,93 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 --   ----------------------------------------------------------------------
 --   These provide labels 
 --   ----------------------------------------------------------------------
-local wk = require("which-key")
-wk.register({
-    r = {
-        name = "+replace (Muren)",
-    },
-}, { prefix = "<leader>", mode = "n" })
+wk.add({
+    { "<leader>r", group = "+replace (Muren)" },
+})
 
 --   ----------------------------------------------------------------------
 --   align - Leader a was taken so e is used for "edit"
 --   So far, these are only active during visual mode
 --   ----------------------------------------------------------------------
-wk.register({
-    e = {
-        name = "+align",
-        ["1"] = { name = "+1st line" },
-        m = { name = "+min space" },
-        u = { name = "+UVM" },
-    },
-}, { prefix = "<leader>", mode = "v" })
+wk.add({
+    { "<leader>e", mode = "v", group = "+align" },
+    { "<leader>ee", [[:!align <CR>]],     mode = "v", desc = "Align Default" },
+    { "<leader>e)", [[:!align \)<CR>]],   mode = "v", desc = "Align )" },
+    { "<leader>e#", [[:!align "\#"<CR>]], mode = "v", desc = "Align #" },
+    { "<leader>e(", [[:!align \(<CR>]],   mode = "v", desc = "Align (" },
+    { "<leader>e[", [[:!align \[<CR>]],   mode = "v", desc = "Align [" },
+    { "<leader>e]", [[:!align \]<CR>]],   mode = "v", desc = "Align ]" },
+    { "<leader>e/", [[:!align //<CR>]],   mode = "v", desc = "Align /" },
+    { "<leader>e=", [[:!align =<CR>]],    mode = "v", desc = "Align =" },
+    { "<leader>e:", [[:!align :<CR>]],    mode = "v", desc = "Align :" },
+    { "<leader>e-", [[:!align \-<CR>]],   mode = "v", desc = "Align -" },
+    { "<leader>e{", [[:!align {<CR>]],    mode = "v", desc = "Align {" },
+    { "<leader>e}", [[:!align }<CR>]],    mode = "v", desc = "Align }" },
+    { "<leader>e.", [[:!align .<CR>]],    mode = "v", desc = "Align ." },
+    { "<leader>e,", [[:!align ,<CR>]],    mode = "v", desc = "Align ," },
 
-keymap("v", "<Leader>ee", [[:!align <CR>]],         { noremap = true, silent = true, desc = "Align Default" })
-keymap("v", "<Leader>e)", [[:!align \)<CR>]],       { noremap = true, silent = true, desc = "Align )" })
-keymap("v", "<Leader>e#", [[:!align "\#"<CR>]],     { noremap = true, silent = true, desc = "Align #" })
-keymap("v", "<Leader>e(", [[:!align \(<CR>]],       { noremap = true, silent = true, desc = "Align (" })
-keymap("v", "<Leader>e[", [[:!align \[<CR>]],       { noremap = true, silent = true, desc = "Align [" })
-keymap("v", "<Leader>e]", [[:!align \]<CR>]],       { noremap = true, silent = true, desc = "Align ]" })
-keymap("v", "<Leader>e/", [[:!align //<CR>]],       { noremap = true, silent = true, desc = "Align /" })
-keymap("v", "<Leader>e=", [[:!align =<CR>]],        { noremap = true, silent = true, desc = "Align =" })
-keymap("v", "<Leader>e:", [[:!align :<CR>]],        { noremap = true, silent = true, desc = "Align :" })
-keymap("v", "<Leader>e-", [[:!align \-<CR>]],       { noremap = true, silent = true, desc = "Align -" })
-keymap("v", "<Leader>e{", [[:!align {<CR>]],        { noremap = true, silent = true, desc = "Align {" })
-keymap("v", "<Leader>e}", [[:!align }<CR>]],        { noremap = true, silent = true, desc = "Align }" })
-keymap("v", "<Leader>e.", [[:!align .<CR>]],        { noremap = true, silent = true, desc = "Align ." })
-keymap("v", "<Leader>e,", [[:!align ,<CR>]],        { noremap = true, silent = true, desc = "Align ," })
+    { "<leader>e1", mode = "v", group = "+1st line" },
+    { "<leader>e1e", [[:!align -1<CR>]],      mode = "v", desc = "Align 1st Default" },
+    { "<leader>e1)", [[:!align -1 \)<CR>]],   mode = "v", desc = "Align 1st )" },
+    { "<leader>e1#", [[:!align -1 "\#"<CR>]], mode = "v", desc = "Align 1st #" },
+    { "<leader>e1(", [[:!align -1 \(<CR>]],   mode = "v", desc = "Align 1st (" },
+    { "<leader>e1[", [[:!align -1 \[<CR>]],   mode = "v", desc = "Align 1st [" },
+    { "<leader>e1]", [[:!align -1 \]<CR>]],   mode = "v", desc = "Align 1st ]" },
+    { "<leader>e1/", [[:!align -1 //<CR>]],   mode = "v", desc = "Align 1st /" },
+    { "<leader>e1=", [[:!align -1 =<CR>]],    mode = "v", desc = "Align 1st =" },
+    { "<leader>e1:", [[:!align -1 :<CR>]],    mode = "v", desc = "Align 1st :" },
+    { "<leader>e1-", [[:!align -1 \-<CR>]],   mode = "v", desc = "Align 1st -" },
+    { "<leader>e1{", [[:!align -1 {<CR>]],    mode = "v", desc = "Align 1st {" },
+    { "<leader>e1}", [[:!align -1 }<CR>]],    mode = "v", desc = "Align 1st }" },
+    { "<leader>e1.", [[:!align -1 .<CR>]],    mode = "v", desc = "Align 1st ." },
 
-keymap("v", "<Leader>e1e", [[:!align -1<CR>]],      { noremap = true, silent = true, desc = "Align 1st Default" })
-keymap("v", "<Leader>e1)", [[:!align -1 \)<CR>]],   { noremap = true, silent = true, desc = "Align 1st )" })
-keymap("v", "<Leader>e1#", [[:!align -1 "\#"<CR>]], { noremap = true, silent = true, desc = "Align 1st #" })
-keymap("v", "<Leader>e1(", [[:!align -1 \(<CR>]],   { noremap = true, silent = true, desc = "Align 1st (" })
-keymap("v", "<Leader>e1[", [[:!align -1 \[<CR>]],   { noremap = true, silent = true, desc = "Align 1st [" })
-keymap("v", "<Leader>e1]", [[:!align -1 \]<CR>]],   { noremap = true, silent = true, desc = "Align 1st ]" })
-keymap("v", "<Leader>e1/", [[:!align -1 //<CR>]],   { noremap = true, silent = true, desc = "Align 1st /" })
-keymap("v", "<Leader>e1=", [[:!align -1 =<CR>]],    { noremap = true, silent = true, desc = "Align 1st =" })
-keymap("v", "<Leader>e1:", [[:!align -1 :<CR>]],    { noremap = true, silent = true, desc = "Align 1st :" })
-keymap("v", "<Leader>e1-", [[:!align -1 \-<CR>]],   { noremap = true, silent = true, desc = "Align 1st -" })
-keymap("v", "<Leader>e1{", [[:!align -1 {<CR>]],    { noremap = true, silent = true, desc = "Align 1st {" })
-keymap("v", "<Leader>e1}", [[:!align -1 }<CR>]],    { noremap = true, silent = true, desc = "Align 1st }" })
-keymap("v", "<Leader>e1.", [[:!align -1 .<CR>]],    { noremap = true, silent = true, desc = "Align 1st ." })
+    { "<leader>em", mode = "v", group = "+min space" },
+    { "<leader>eme", [[:!align -m<CR>]],      mode = "v", desc = "Align Min Default" },
+    { "<leader>em)", [[:!align -m \)<CR>]],   mode = "v", desc = "Align Min )" },
+    { "<leader>em#", [[:!align -m "\#"<CR>]], mode = "v", desc = "Align Min #" },
+    { "<leader>em(", [[:!align -m \(<CR>]],   mode = "v", desc = "Align Min (" },
+    { "<leader>em[", [[:!align -m \[<CR>]],   mode = "v", desc = "Align Min [" },
+    { "<leader>em]", [[:!align -m \]<CR>]],   mode = "v", desc = "Align Min ]" },
+    { "<leader>em/", [[:!align -m //<CR>]],   mode = "v", desc = "Align Min /" },
+    { "<leader>em=", [[:!align -m =<CR>]],    mode = "v", desc = "Align Min =" },
+    { "<leader>em:", [[:!align -m :<CR>]],    mode = "v", desc = "Align Min :" },
+    { "<leader>em-", [[:!align -m \-<CR>]],   mode = "v", desc = "Align Min -" },
+    { "<leader>em{", [[:!align -m {<CR>]],    mode = "v", desc = "Align Min {" },
+    { "<leader>em}", [[:!align -m }<CR>]],    mode = "v", desc = "Align Min }" },
+    { "<leader>em.", [[:!align -m .<CR>]],    mode = "v", desc = "Align Min ." },
 
-keymap("v", "<Leader>eme", [[:!align -m<CR>]],      { noremap = true, silent = true, desc = "Align Min Default" })
-keymap("v", "<Leader>em)", [[:!align -m \)<CR>]],   { noremap = true, silent = true, desc = "Align Min )" })
-keymap("v", "<Leader>em#", [[:!align -m "\#"<CR>]], { noremap = true, silent = true, desc = "Align Min #" })
-keymap("v", "<Leader>em(", [[:!align -m \(<CR>]],   { noremap = true, silent = true, desc = "Align Min (" })
-keymap("v", "<Leader>em[", [[:!align -m \[<CR>]],   { noremap = true, silent = true, desc = "Align Min [" })
-keymap("v", "<Leader>em]", [[:!align -m \]<CR>]],   { noremap = true, silent = true, desc = "Align Min ]" })
-keymap("v", "<Leader>em/", [[:!align -m //<CR>]],   { noremap = true, silent = true, desc = "Align Min /" })
-keymap("v", "<Leader>em=", [[:!align -m =<CR>]],    { noremap = true, silent = true, desc = "Align Min =" })
-keymap("v", "<Leader>em:", [[:!align -m :<CR>]],    { noremap = true, silent = true, desc = "Align Min :" })
-keymap("v", "<Leader>em-", [[:!align -m \-<CR>]],   { noremap = true, silent = true, desc = "Align Min -" })
-keymap("v", "<Leader>em{", [[:!align -m {<CR>]],    { noremap = true, silent = true, desc = "Align Min {" })
-keymap("v", "<Leader>em}", [[:!align -m }<CR>]],    { noremap = true, silent = true, desc = "Align Min }" })
-keymap("v", "<Leader>em.", [[:!align -m .<CR>]],    { noremap = true, silent = true, desc = "Align Min ." })
-
-keymap("v", "<Leader>eum", [[:!align " m_"<CR>]],   { noremap = true, silent = true, desc = "Align m_" })
-keymap("v", "<Leader>eu:", [[:!align ::<CR>]],      { noremap = true, silent = true, desc = "Align ::" })
-keymap("v", "<Leader>eut", [[:!align type<CR>]],    { noremap = true, silent = true, desc = "Align type" })
-keymap("v", "<Leader>euT", [[:!align this<CR>]],    { noremap = true, silent = true, desc = "Align this" })
+    { "<leader>eu", mode = "v", group = "+UVM" },
+    { "<leader>eum", [[:!align " m_"<CR>]],   mode = "v", desc = "Align m_" },
+    { "<leader>eu:", [[:!align ::<CR>]],      mode = "v", desc = "Align ::" },
+    { "<leader>eut", [[:!align type<CR>]],    mode = "v", desc = "Align type" },
+    { "<leader>euT", [[:!align this<CR>]],    mode = "v", desc = "Align this" },
+})
 
 --   ----------------------------------------------------------------------
 --   -- Save to temp files - Leader f is the file group
 --   ----------------------------------------------------------------------
-wk.register({
-    j = {
-        name = "+temp file fun",
-    },
-}, { prefix = "<leader>", mode = "n" })
-
-keymap( "v", "<Leader>ja", [[:w! $HOME/.config/nvim/files/tempa<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File a" })
-keymap( "v", "<Leader>jb", [[:w! $HOME/.config/nvim/files/tempb<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File b" })
-keymap( "v", "<Leader>jc", [[:w! $HOME/.config/nvim/files/tempc<CR>]],   { noremap = true, silent = true, desc = "Write to Temp File c" })
-keymap( "v", "<Leader>jA", [[:w >> $HOME/.config/nvim/files/tempa<CR>]], { noremap = true, silent = true, desc = "Append to Temp File a" })
-keymap( "v", "<Leader>jB", [[:w >> $HOME/.config/nvim/files/tempb<CR>]], { noremap = true, silent = true, desc = "Append to Temp File b" })
-keymap( "v", "<Leader>jC", [[:w >> $HOME/.config/nvim/files/tempc<CR>]], { noremap = true, silent = true, desc = "Append to Temp File c" })
-keymap( "n", "<Leader>ja", [[:r $HOME/.config/nvim/files/tempa<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File a" })
-keymap( "n", "<Leader>jb", [[:r $HOME/.config/nvim/files/tempb<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File b" })
-keymap( "n", "<Leader>jc", [[:r $HOME/.config/nvim/files/tempc<CR>]],    { noremap = true, silent = true, desc = "Read from Temp File c" })
+wk.add({
+    { "<leader>j", mode = {"n", "v"}, group = "+temp file fun" },
+    { "<leader>ja", [[:w! $HOME/.config/nvim/files/tempa<CR>]],   mode = "v", desc = "Write to Temp File a" },
+    { "<leader>jb", [[:w! $HOME/.config/nvim/files/tempb<CR>]],   mode = "v", desc = "Write to Temp File b" },
+    { "<leader>jc", [[:w! $HOME/.config/nvim/files/tempc<CR>]],   mode = "v", desc = "Write to Temp File c" },
+    { "<leader>jA", [[:w >> $HOME/.config/nvim/files/tempa<CR>]], mode = "v", desc = "Append to Temp File a" },
+    { "<leader>jB", [[:w >> $HOME/.config/nvim/files/tempb<CR>]], mode = "v", desc = "Append to Temp File b" },
+    { "<leader>jC", [[:w >> $HOME/.config/nvim/files/tempc<CR>]], mode = "v", desc = "Append to Temp File c" },
+    { "<leader>ja", [[:r $HOME/.config/nvim/files/tempa<CR>]],    mode = "n", desc = "Read from Temp File a" },
+    { "<leader>jb", [[:r $HOME/.config/nvim/files/tempb<CR>]],    mode = "n", desc = "Read from Temp File b" },
+    { "<leader>jc", [[:r $HOME/.config/nvim/files/tempc<CR>]],    mode = "n", desc = "Read from Temp File c" },
+})
 
 --   ----------------------------------------------------------------------
 --   diff options
 --   ----------------------------------------------------------------------
-wk.register({
-    d = {
-        name = "+diff",
-    },
-}, { prefix = "<leader>", mode = "n" })
-
-keymap("n", "<Leader>dw", "<cmd>set diffopt+=iwhiteall<CR>",      { noremap = true, silent = true, desc = "Add ignore all whitespace" })
-keymap("n", "<Leader>dW", "<cmd>set diffopt-=iwhiteall<CR>",      { noremap = true, silent = true, desc = "Remove ignore all whitespace" })
-keymap("n", "<Leader>dc", "<cmd>set diffopt+=icase<CR>",          { noremap = true, silent = true, desc = "Add ignore case" })
-keymap("n", "<Leader>dC", "<cmd>set diffopt-=icase<CR>",          { noremap = true, silent = true, desc = "Remove ignore case" })
-keymap("n", "<Leader>db", "<cmd>set diffopt+=iblank<CR>",         { noremap = true, silent = true, desc = "Add ignore blank" })
-keymap("n", "<Leader>dB", "<cmd>set diffopt-=iblank<CR>",         { noremap = true, silent = true, desc = "Remove ignore blank" })
+wk.add({
+    { "<leader>d", mode = "n", group = "+diff" },
+    { "<Leader>dw", "<cmd>set diffopt+=iwhiteall<CR>",      mode = "n", desc = "Add ignore all whitespace" },
+    { "<Leader>dW", "<cmd>set diffopt-=iwhiteall<CR>",      mode = "n", desc = "Remove ignore all whitespace" },
+    { "<Leader>dc", "<cmd>set diffopt+=icase<CR>",          mode = "n", desc = "Add ignore case" },
+    { "<Leader>dC", "<cmd>set diffopt-=icase<CR>",          mode = "n", desc = "Remove ignore case" },
+    { "<Leader>db", "<cmd>set diffopt+=iblank<CR>",         mode = "n", desc = "Add ignore blank" },
+    { "<Leader>dB", "<cmd>set diffopt-=iblank<CR>",         mode = "n", desc = "Remove ignore blank" },
+})
