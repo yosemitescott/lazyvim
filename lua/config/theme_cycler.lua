@@ -1,6 +1,8 @@
 local function theme_cycler(step)
     MyThemeState  = 0
     local themes = {
+        "moonfly",
+        "nightfly",
         "nightfox",
         "carbonfox",
         "nordfox",

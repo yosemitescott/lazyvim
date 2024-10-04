@@ -21,6 +21,7 @@ local M = {
         { "<leader>vf", "<cmd>VerilogFoldingRemove comment<CR> <BAR><cmd>foldopen!<CR>", desc = "Remove comment Folding" },
         { "<leader>vF", "<cmd>VerilogFoldingAdd comment<CR>",                            desc = "Add comment Folding" },
         { "<Leader>vb", "<cmd>lua ToggleBlockAlign()<CR>",                               desc = "Toggle Block Alignment" },
+        { "<Leader>vu", "<cmd>lua AddUVMInfoMethodName()<CR>",                           desc = "Add UVM Method Identifier to UVM messages" },
         { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
     },
@@ -91,6 +92,32 @@ function M.config()                 -- Use config since it's not a LUA plugin
             vim.o.colorcolumn = ""
         end
     end
+
+    AddUVMInfoMethodName = function()
+        -- Save the current position to return to it
+        local marka = vim.api.nvim_win_get_cursor(0)
+        local row, col = unpack(marka)
+
+        -- Search for the pattern `end[ft]` which is either endfunction or endtask
+        vim.cmd("keeppatterns /end[ft]")
+
+--      -- Go to start of the line, then go to the matching function/task and yank the name
+        vim.cmd("normal 0")
+        vim.cmd("normal %")
+        local method_name = string.match(vim.api.nvim_get_current_line(), '::([%w_]+)')
+
+--      -- Go to mark `a` and add custom text
+        vim.api.nvim_win_set_cursor(0, marka)
+        local line        = vim.api.nvim_get_current_line()
+        local uvm_        = string.match(line, '(uvm_[%l]+)')
+        local insert_text = uvm_ .. '({get_name(), "::' .. method_name .. '"},'
+        local new_line    = string.gsub(line, '([%w_()]+,', insert_text, 1)
+
+        -- Replace current line and recenter screen
+        vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})
+        vim.cmd("normal zz")
+    end
+
 
     vim.filetype.add({
         extension = {
