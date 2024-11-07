@@ -22,6 +22,7 @@ local M = {
         { "<leader>vF", "<cmd>VerilogFoldingAdd comment<CR>",                            desc = "Add comment Folding" },
         { "<Leader>vb", "<cmd>lua ToggleBlockAlign()<CR>",                               desc = "Toggle Block Alignment" },
         { "<Leader>vu", "<cmd>lua AddUVMInfoMethodName()<CR>",                           desc = "Add UVM Method Identifier to UVM messages" },
+        { "<Leader>ve", "<cmd>lua AddSVEndLabel()<CR>",                                  desc = "Add SystemVerilog End Method Identifier" },
         { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
     },
@@ -112,6 +113,26 @@ function M.config()                 -- Use config since it's not a LUA plugin
         local uvm_        = string.match(line, '(uvm_[%l]+)')
         local insert_text = uvm_ .. '({get_name(), "::' .. method_name .. '"},'
         local new_line    = string.gsub(line, '([%w_()]+,', insert_text, 1)
+
+        -- Replace current line and recenter screen
+        vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})
+        vim.cmd("normal zz")
+    end
+
+    AddSVEndLabel = function()
+        -- Save the current position to return to it
+        local marka = vim.api.nvim_win_get_cursor(0)
+        local row, col = unpack(marka)
+
+--      -- Go to start of the line, then go to the matching function/task and yank the name
+        vim.cmd("normal 0")
+        vim.cmd("normal %")
+        local method_name = string.match(vim.api.nvim_get_current_line(), '::([%w_]+)')
+
+--      -- Go to mark `a` and add custom text
+        vim.api.nvim_win_set_cursor(0, marka)
+        local line     = vim.api.nvim_get_current_line()
+        local new_line = line .. ': ' .. method_name
 
         -- Replace current line and recenter screen
         vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})

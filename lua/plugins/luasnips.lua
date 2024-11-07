@@ -1,7 +1,9 @@
+if true then return {} end
+
 return {
     "L3MON4D3/LuaSnip",
     version = "v2.*",
-    event = "BufReadPost",
+--  event = "BufReadPost",
     build = "make install_jsregexp",
     opts = {
         -- This tells LuaSnip to remember to keep around the last snippet.
@@ -23,7 +25,8 @@ return {
         -- },
     },
     opts = function(_, opts)
-        require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })
+--      require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })
+        require("luasnip.loaders.from_lua").load({ paths = {"$MY_SHARED/lazyvim/nvim/lua/snippets"} })
         require("luasnip/loaders/from_vscode").lazy_load()
 
         local ls = require("luasnip")

@@ -196,6 +196,7 @@ wk.add({
     { "<leader>e}", [[:!align }<CR>]],    mode = "v", desc = "Align }" },
     { "<leader>e.", [[:!align .<CR>]],    mode = "v", desc = "Align ." },
     { "<leader>e,", [[:!align ,<CR>]],    mode = "v", desc = "Align ," },
+    { "<leader>e?", [[:!align ,<CR>]],    mode = "v", desc = "Align ?" },
 
     { "<leader>e1", mode = "v", group = "+1st line" },
     { "<leader>e1e", [[:!align -1<CR>]],      mode = "v", desc = "Align 1st Default" },
@@ -239,15 +240,15 @@ wk.add({
 --   ----------------------------------------------------------------------
 wk.add({
     { "<leader>j", mode = {"n", "v"}, group = "+temp file fun" },
-    { "<leader>ja", [[:w! $HOME/.config/nvim/files/tempa<CR>]],   mode = "v", desc = "Write to Temp File a" },
-    { "<leader>jb", [[:w! $HOME/.config/nvim/files/tempb<CR>]],   mode = "v", desc = "Write to Temp File b" },
-    { "<leader>jc", [[:w! $HOME/.config/nvim/files/tempc<CR>]],   mode = "v", desc = "Write to Temp File c" },
-    { "<leader>jA", [[:w >> $HOME/.config/nvim/files/tempa<CR>]], mode = "v", desc = "Append to Temp File a" },
-    { "<leader>jB", [[:w >> $HOME/.config/nvim/files/tempb<CR>]], mode = "v", desc = "Append to Temp File b" },
-    { "<leader>jC", [[:w >> $HOME/.config/nvim/files/tempc<CR>]], mode = "v", desc = "Append to Temp File c" },
-    { "<leader>ja", [[:r $HOME/.config/nvim/files/tempa<CR>]],    mode = "n", desc = "Read from Temp File a" },
-    { "<leader>jb", [[:r $HOME/.config/nvim/files/tempb<CR>]],    mode = "n", desc = "Read from Temp File b" },
-    { "<leader>jc", [[:r $HOME/.config/nvim/files/tempc<CR>]],    mode = "n", desc = "Read from Temp File c" },
+    { "<leader>ja", [[:w! $XDG_CONFIG_HOME/nvim/files/tempa<CR>]],   mode = "v", desc = "Write to Temp File a" },
+    { "<leader>jb", [[:w! $XDG_CONFIG_HOME/nvim/files/tempb<CR>]],   mode = "v", desc = "Write to Temp File b" },
+    { "<leader>jc", [[:w! $XDG_CONFIG_HOME/nvim/files/tempc<CR>]],   mode = "v", desc = "Write to Temp File c" },
+    { "<leader>jA", [[:w >> $XDG_CONFIG_HOME/nvim/files/tempa<CR>]], mode = "v", desc = "Append to Temp File a" },
+    { "<leader>jB", [[:w >> $XDG_CONFIG_HOME/nvim/files/tempb<CR>]], mode = "v", desc = "Append to Temp File b" },
+    { "<leader>jC", [[:w >> $XDG_CONFIG_HOME/nvim/files/tempc<CR>]], mode = "v", desc = "Append to Temp File c" },
+    { "<leader>ja", [[:r $XDG_CONFIG_HOME/nvim/files/tempa<CR>]],    mode = "n", desc = "Read from Temp File a" },
+    { "<leader>jb", [[:r $XDG_CONFIG_HOME/nvim/files/tempb<CR>]],    mode = "n", desc = "Read from Temp File b" },
+    { "<leader>jc", [[:r $XDG_CONFIG_HOME/nvim/files/tempc<CR>]],    mode = "n", desc = "Read from Temp File c" },
 })
 
 --   ----------------------------------------------------------------------

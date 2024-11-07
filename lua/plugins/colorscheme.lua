@@ -128,10 +128,16 @@ return {
         end,
 
     },
+    { "diegoulloao/neofusion.nvim", priority = 1000 , config = true,
+        opts = {
+            dim_inactive = true,
+        },
+    },
     { "LazyVim/LazyVim", opts = {
 --      colorscheme = "nightfox",
 --      colorscheme = "gruvbox",
-        colorscheme = "everforest",
+--      colorscheme = "everforest",
+        colorscheme = "neofusion",
     } },
 
 --  { "lukas-reineke/virt-column.nvim", opts = {} },

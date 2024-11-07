@@ -38,7 +38,7 @@ return {
                     { action = "Telescope oldfiles",                desc = " Recent files",    icon = "󰄉 ", key = "r" },
                     { action = "Telescope live_grep",               desc = " Find text",       icon = " ", key = "g" },
                     --        { action = "e $MYVIMRC",                        desc = " Config",          icon = " ", key = "c" },
-                    { action = "Neotree ~/.config/nvim/lua",        desc = " Config",          icon = " ", key = "c" },
+                    { action = "Neotree $XDG_CONFIG_HOME/nvim/lua", desc = " Config",          icon = " ", key = "c" },
                     { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
                     { action = "Telescope projects",                desc = " Projects",        icon = " ", key = "p" },
                     { action = "LazyExtras",                        desc = " Lazy Extras",     icon = " ", key = "e" },
