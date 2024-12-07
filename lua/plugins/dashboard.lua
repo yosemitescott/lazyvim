@@ -1,3 +1,4 @@
+if true then return {} end
 return {
     "nvimdev/dashboard-nvim",
     event = "VimEnter",

@@ -1,3 +1,5 @@
+if true then return {} end
+
 return {
     'LunarVim/bigfile.nvim',
     event = 'BufReadPre',
