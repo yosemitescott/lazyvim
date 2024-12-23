@@ -5,7 +5,7 @@ local M = {
 --      {"<leader>M", "<Plug>(quickhl-manual-reset)", desc = "Reset Marks", mode = {"n", "v"}},
 --  }
     'dvoytik/hi-my-words.nvim',
-    config = function(_, opts) require("hi-my-words").    setup(opts) end,
+    config = function(_, opts) require("hi-my-words").setup(opts) end,
     keys = {
         {"<leader>m", ":HiMyWordsToggle<CR>",  desc = "Mark",        mode = {"n", "v"}},
         {"<leader>M", ":HiMyWordsClear<CR>)",  desc = "Reset Marks", mode = {"n", "v"}},
