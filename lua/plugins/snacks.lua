@@ -22,6 +22,7 @@ end
 return {
     "folke/snacks.nvim",
     opts = {
+        scroll  = { enabled = false,},
         git     = { enabled = true, },
 --      lazygit = { enabled = true, },
 --      win     = { enabled = true, },
@@ -36,7 +37,7 @@ return {
                     { icon = " ", key = "n", desc = "New File",            action  = ":ene | startinsert" },
                     { icon = " ", key = "g", desc = "Find Text",           action  = ":lua Snacks.dashboard.pick('live_grep')" },
                     { icon = " ", key = "r", desc = "Recent Files",        action  = ":lua Snacks.dashboard.pick('oldfiles')" },
-                    { icon = " ", key = "c", desc = "Config w/ Telescope", action  = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+                    { icon = " ", key = "c", desc = "Config w/ fzf",       action  = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
                     { icon = " ", key = "C", desc = "Config w/ NeoTree",   action  = ":Neotree dir=$XDG_CONFIG_HOME/nvim/lua" },
                     { icon = " ", key = "s", desc = "Restore Session",     section = "session" },
                     { icon = " ", key = "x", desc = "Lazy Extras",         action  = ":LazyExtras" },
@@ -60,6 +61,8 @@ return {
                 { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
                 { pane = 2, icon = " ", title = "Projects",     section = "projects",     indent = 2, padding = 1 },
                 function()
+--                  local pathname = vim.fn.stdpath("config")
+--                  print( "Path is " .. pathname)
                     local in_git = Snacks.git.get_root() ~= nil
                     local cmds = {
  --                     {
@@ -106,106 +109,3 @@ return {
     },
 }
 
-
-
-
-
---spf  return {
---spf      "nvimdev/dashboard-nvim",
---spf      event = "VimEnter",
---spf      opts = function()
---spf          local logo = [[
---spf           _______________________________________________________________________________________
---spf           |                                                                                     |
---spf           |    ███╗   ██╗███████╗██╗    ██╗     ██████╗ ██╗     ███████╗███╗   ██╗███╗   ██╗    |
---spf           |    ████╗  ██║██╔════╝██║    ██║    ██╔════╝ ██║     ██╔════╝████╗  ██║████╗  ██║    |
---spf           |    ██╔██╗ ██║█████╗  ██║ █╗ ██║    ██║  ███╗██║     █████╗  ██╔██╗ ██║██╔██╗ ██║    |
---spf           |    ██║╚██╗██║██╔══╝  ██║███╗██║    ██║   ██║██║     ██╔══╝  ██║╚██╗██║██║╚██╗██║    |
---spf           |    ██║ ╚████║███████╗╚███╔███╔╝    ╚██████╔╝███████╗███████╗██║ ╚████║██║ ╚████║    |
---spf           |    ╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝      ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═══╝    |
---spf           |     _______  ________         __         __  __         ___                         |
---spf           |    / __/ _ \/ ___/ _ | ___   / /____    / /_/ /  ___   / _ \___ ___ ______ _____    |
---spf           |   / _// ___/ (_ / __ |(_-<  / __/ _ \  / __/ _ \/ -_) / , _/ -_|_-</ __/ // / -_)   |
---spf           |  /_/ /_/   \___/_/ |_/___/  \__/\___/  \__/_//_/\__/ /_/|_|\__/___/\__/\_,_/\__/    |
---spf           |_____________________________________________________________________________________|
---spf      ]]
---spf  
---spf          logo = string.rep("\n", 8) .. logo .. "\n\n"
---spf  
---spf          local opts = {
---spf              theme = "doom",
---spf              hide = {
---spf                  -- this is taken care of by lualine
---spf                  -- enabling this messes up the actual laststatus setting after loading a file
---spf                  statusline = false,
---spf              },
---spf              config = {
---spf                  header = vim.split(logo, "\n"),
---spf                  -- stylua: ignore
---spf                  center = {
---spf                      { action = "Telescope find_files",              desc = " Find file",       icon = " ", key = "f" },
---spf                      { action = "G",                                 desc = " Git Fugitive",    icon = " ", key = "G" },
---spf                      { action = "Neotree",                           desc = " NeoTree",         icon = "󰐅 ", key = "E" },
---spf                      { action = "ene | startinsert",                 desc = " New file",        icon = " ", key = "n" },
---spf                      { action = "Telescope oldfiles",                desc = " Recent files",    icon = "󰄉 ", key = "r" },
---spf                      { action = "Telescope live_grep",               desc = " Find text",       icon = " ", key = "g" },
---spf                      --        { action = "e $MYVIMRC",                        desc = " Config",          icon = " ", key = "c" },
---spf                      { action = "Neotree $XDG_CONFIG_HOME/nvim/lua", desc = " Config",          icon = " ", key = "c" },
---spf                      { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
---spf                      { action = "Telescope projects",                desc = " Projects",        icon = " ", key = "p" },
---spf                      { action = "LazyExtras",                        desc = " Lazy Extras",     icon = " ", key = "e" },
---spf                      { action = "Lazy",                              desc = " Lazy",            icon = "󰒲 ", key = "l" },
---spf                      { action = "qa",                                desc = " Quit",            icon = " ", key = "q" },
---spf                  },
---spf                  footer = function()
---spf                      local stats = require("lazy").stats()
---spf                      local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
---spf                      return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
---spf                  end,
---spf              },
---spf          }
---spf  
---spf          for _, button in ipairs(opts.config.center) do
---spf              button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
---spf          end
---spf  
---spf          -- close Lazy and re-open when the dashboard is ready
---spf          if vim.o.filetype == "lazy" then
---spf              vim.cmd.close()
---spf              vim.api.nvim_create_autocmd("User", {
---spf                  pattern = "DashboardLoaded",
---spf                  callback = function()
---spf                      require("lazy").show()
---spf                  end,
---spf              })
---spf          end
---spf  
---spf          return opts
---spf      end,
---spf  }
---return {
---    "glepnir/dashboard-nvim",
---
---    opts = function(_, opts)
---
---        local logo = [[
---            _______________________________________________________________________________________
---            |                                                                                     |
---            |    ███╗   ██╗███████╗██╗    ██╗     ██████╗ ██╗     ███████╗███╗   ██╗███╗   ██╗    |
---            |    ████╗  ██║██╔════╝██║    ██║    ██╔════╝ ██║     ██╔════╝████╗  ██║████╗  ██║    |
---            |    ██╔██╗ ██║█████╗  ██║ █╗ ██║    ██║  ███╗██║     █████╗  ██╔██╗ ██║██╔██╗ ██║    |
---            |    ██║╚██╗██║██╔══╝  ██║███╗██║    ██║   ██║██║     ██╔══╝  ██║╚██╗██║██║╚██╗██║    |
---            |    ██║ ╚████║███████╗╚███╔███╔╝    ╚██████╔╝███████╗███████╗██║ ╚████║██║ ╚████║    |
---            |    ╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝      ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═══╝    |
---            |     _______  ________         __         __  __         ___                         |
---            |    / __/ _ \/ ___/ _ | ___   / /____    / /_/ /  ___   / _ \___ ___ ______ _____    |
---            |   / _// ___/ (_ / __ |(_-<  / __/ _ \  / __/ _ \/ -_) / , _/ -_|_-</ __/ // / -_)   |
---            |  /_/ /_/   \___/_/ |_/___/  \__/\___/  \__/_//_/\__/ /_/|_|\__/___/\__/\_,_/\__/    |
---            |_____________________________________________________________________________________|
---            ]],
---
---        opts = {
---            header = vim.split(logo, "\n"),
---        },
---    end,
---}

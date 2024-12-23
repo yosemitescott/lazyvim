@@ -2,6 +2,7 @@
 
 return {
     "nvim-telescope/telescope.nvim",
+    enable = true,
     dependencies = {
         "nvim-lua/plenary.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", build = 'make'},
@@ -33,82 +34,87 @@ return {
         -- add a keymap to browse plugin files
         -- stylua: ignore
         {
-            "<leader>fP",
-            function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-            desc = "Find Plugin File",
+            "<leader>vv",
+            "<cmd>lua require('telescope').extensions.menufacture.live_grep() type_filter=verilog<CR>",
+            desc = "Live Grep - verilog - ctrl-6 to change",
         },
+--      {
+--          "<leader>fP",
+--          function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
+--          desc = "Find Plugin File",
+--      },
 --      {
 --          "<leader>sf",
 --          function() require("telescope.builtin").find_files({'fd', vim.fn.expand("<cword>")}) end,
 --          desc = "Search File under cursor",
 --      },
-        {
-            "<leader>sf",
-            function() require("telescope.builtin").find_files({find_command={'fd', vim.fn.expand("<cword>")}}) end,
-            desc = "Search File under cursor",
-        },
-        {
-            "<leader>fl",
-            "<cmd>Telescope lazy<CR>",
-            desc = "Find Lazy Plugins",
-        },
-        {
-            "<leader>fg",
-            "<cmd>Telescope live_grep<CR>",
-            desc = "Live Grep",
-        },
-        {
-            "<leader>sl",
-            "<cmd>Telescope lsp_document_symbols<CR>",
-            desc = "Telescope LSP Symbols",
-        },
-        {
-            "<leader>sn",
-            "<cmd>Telescope noice<CR>",
-            desc = "Search Noice messages",
-        },
-        {
-            "<leader>gb",
-            "<cmd>Telescope git_branches<CR>",
-            desc = "Telescope Git Branches",
-        },
-        {
-            "<leader>8",
-            "<cmd>Telescope grep_string<CR>",
-            --"<cmd>lua require('telescope').extensions.menufacture.grep_string()<CR>",
-            desc = "Grep Word Under Cursor - ctrl-6 to change",
-        },
-        --  {
-        --    "<leader>fz",
-        --    "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
-        --    desc = "Live Grep Args",
-        --  },
-        {
-            "<leader>fx",
-            "<cmd>lua require('telescope').extensions.menufacture.find_files()<CR>",
-            desc = "Find Files - ctrl-6 to change",
-        },
-        {
-            "<leader>fy",
-            "<cmd>lua require('telescope').extensions.menufacture.git_files()<CR>",
-            desc = "Git Files - ctrl-6 to change",
-        },
-        {
-            "<leader>fz",
-            "<cmd>lua require('telescope').extensions.menufacture.live_grep()<CR>",
-            desc = "Live Grep - ctrl-6 to change",
-        },
-        {
-            "<leader>fu",
-            "<cmd>lua require('telescope').extensions.menufacture.oldfiles()<CR>",
-            desc = "Old Files - ctrl-6 to change",
-        },
-        {
-            "<leader>vv",
-            "<cmd>lua require('telescope').extensions.menufacture.live_grep() type_filter=verilog<CR>",
-            desc = "Live Grep - verilog - ctrl-6 to change",
-        },
+--      {
+--          "<leader>sf",
+--          function() require("telescope.builtin").find_files({find_command={'fd', vim.fn.expand("<cword>")}}) end,
+--          desc = "Search File under cursor",
+--      },
+--      {
+--          "<leader>fl",
+--          "<cmd>Telescope lazy<CR>",
+--          desc = "Find Lazy Plugins",
+--      },
+--      {
+--          "<leader>fg",
+--          "<cmd>Telescope live_grep<CR>",
+--          desc = "Live Grep",
+--      },
+--      {
+--          "<leader>sl",
+--          "<cmd>Telescope lsp_document_symbols<CR>",
+--          desc = "Telescope LSP Symbols",
+--      },
+--      {
+--          "<leader>sn",
+--          "<cmd>Telescope noice<CR>",
+--          desc = "Search Noice messages",
+--      },
+--      {
+--          "<leader>gb",
+--          "<cmd>Telescope git_branches<CR>",
+--          desc = "Telescope Git Branches",
+--      },
+--      {
+--          "<leader>8",
+--          "<cmd>Telescope grep_string<CR>",
+--          --"<cmd>lua require('telescope').extensions.menufacture.grep_string()<CR>",
+--          desc = "Grep Word Under Cursor - ctrl-6 to change",
+--      },
+--      --  {
+--      --    "<leader>fz",
+--      --    "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+--      --    desc = "Live Grep Args",
+--      --  },
+--      {
+--          "<leader>fx",
+--          "<cmd>lua require('telescope').extensions.menufacture.find_files()<CR>",
+--          desc = "Find Files - ctrl-6 to change",
+--      },
+--      {
+--          "<leader>fy",
+--          "<cmd>lua require('telescope').extensions.menufacture.git_files()<CR>",
+--          desc = "Git Files - ctrl-6 to change",
+--      },
+--      {
+--          "<leader>fz",
+--          "<cmd>lua require('telescope').extensions.menufacture.live_grep()<CR>",
+--          desc = "Live Grep - ctrl-6 to change",
+--      },
+--      {
+--          "<leader>fu",
+--          "<cmd>lua require('telescope').extensions.menufacture.oldfiles()<CR>",
+--          desc = "Old Files - ctrl-6 to change",
+--      },
     },
+
+
+
+
+
 
 --  {
 --      "nvim-telescope/telescope-ui-select.nvim",

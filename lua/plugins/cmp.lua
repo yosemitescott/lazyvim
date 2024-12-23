@@ -1,3 +1,5 @@
+if true then return {} end
+
 local M = {
     "hrsh7th/nvim-cmp",
     dependencies = {
