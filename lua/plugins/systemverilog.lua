@@ -25,6 +25,9 @@ local M = {
         { "<Leader>ve", "<cmd>lua AddSVEndLabel()<CR>",                                  desc = "Add SystemVerilog End Method Identifier" },
         { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
+
+        { "<leader>vR",  group = "+Replace" },
+        { "<Leader>vRd", [[:s/\$display\((.*\);/`uvm_info(get_name(), $sformatf\1, UVM_LOW)<cr>]], desc = "Replace display with uvm_info"},
     },
     init = function()
 --      vim.opt_local['smartindent'] = false

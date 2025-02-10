@@ -26,28 +26,28 @@ local headers = {
     ["new"] = {
         method = "Function",
         desc   = {
-                 "Class constructor.",
-                 "//",
-                 "// Parameters:",
-                 "// name   - Class object name",
-                 "// parent - Handle of parent object",
+                  "Class constructor.",
+                  "//",
+                  "// Parameters:",
+                  "// name   - Class object name",
+                  "// parent - Handle of parent object",
                  },
                 },
 
     ["build_phase"] = {
         method = "Function",
         desc   =  {
-                  "UVM Build Phase.",
-                  "//",
-                  "// Parameters:",
-                  "// phase - Handle to the current phase object",
+                   "UVM Build Phase.",
+                   "//",
+                   "// Parameters:",
+                   "// phase - Handle to the current phase object",
                 },
     },
 
     ["connect_phase"] = {
         method = "Function",
         desc   = {
-                 "UVM Connect Phase.",
+                  "UVM Connect Phase.",
                   "//",
                   "// Parameters:",
                   "// phase - Handle to the current phase object",
@@ -57,7 +57,7 @@ local headers = {
     ["run_phase"] = {
         method = "Task",
         desc   = {
-                 "UVM Run Phase.",
+                  "UVM Run Phase.",
                   "//",
                   "// Parameters:",
                   "// phase - Handle to the current phase object",
@@ -67,7 +67,7 @@ local headers = {
     ["do_copy"] = {
         method = "Function",
         desc   = {
-                 "Transaction copy execution method.",
+                  "Transaction copy execution method.",
                   "//",
                   "// Parameters:",
                   "// rhs - Object to copy",
@@ -77,7 +77,7 @@ local headers = {
     ["do_compare"] = {
         method = "Function",
         desc   = {
-                 "Transaction comparison execution method.",
+                  "Transaction comparison execution method.",
                   "//",
                   "// Parameters:",
                   "// rhs      - Object to compare",
@@ -91,7 +91,7 @@ local headers = {
     ["convert2string"] = {
         method = "Function",
         desc   = {
-                 "Convert object attributes to a string.",
+                  "Convert object attributes to a string.",
                   "//",
                   "// Returns:",
                   "// string - String representation of this object",
@@ -101,17 +101,17 @@ local headers = {
     ["differences2string"] = {
         method = "Function",
         desc   = {
-                 " Print out only the differences from compares",
+                  " Print out only the differences from compares",
                   "//",
-                  " // Returns:",
-                  " // string - String result of the differences",
+                  "// Returns:",
+                  "// string - String result of the differences",
                  },
     },
 
     ["body"] = {
         method = "Task",
         desc   = {
-                 "Body Task",
+                  "Body Task",
                   "//",
                   "// Parameters:",
                   "// None",
@@ -121,7 +121,7 @@ local headers = {
     ["do_print"] = {
         method = "Function",
         desc   = {
-                 "Transaction print execution method.",
+                  "Transaction print execution method.",
                   "//",
                   "// Parameters:",
                   "// printer - Printer object handle",

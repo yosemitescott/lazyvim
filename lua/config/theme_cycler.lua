@@ -33,7 +33,6 @@ local function theme_cycler(step)
         "github_dark_dimmed",
         "github_dark_high_contrast",
         "github_dark_tritanopia",
-        "github_dimmed",
         "miasma",
         "rose-pine",
     }

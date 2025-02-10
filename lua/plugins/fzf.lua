@@ -6,12 +6,15 @@ return {
             "<cmd>FzfLua grep_cword<CR>",
             desc = "Grep Word Under Cursor",
         },
---      {
---          "<leader>vv",
---          "<cmd>FzfLua live_grep type=verilog<CR>",
---          [[<cmd>lua require("fzf-lua").fzf_live("rg --type=verilog")<CR>]],
---          desc = "Live Grep - verilog",
---      },
+        {
+            "<leader>vv",
+            function()
+                require("fzf-lua").live_grep({
+                    cmd = "rg -t verilog --column --line-number --no-heading --color=always --smart-case --max-columns=4096",
+                })
+            end,
+            desc = "Live Grep - Verilog",
+        },
     },
     opts = {
         oldfiles = {

@@ -155,7 +155,7 @@ local sv_function = s(
                 t(""),
             }),
             i(3, "function_name"),
-            i(4, "myArgs"),
+            i(4, ""),
             i(5, "// TODO"),
             rep(3),
             i(0)
@@ -236,7 +236,7 @@ local sv_task = s(
                 t(""),
             }),
             i(2, "task_name"),
-            i(3, "myArgs"),
+            i(3, ""),
             i(4, "// TODO"),
             rep(2),
             i(0),
@@ -322,12 +322,16 @@ local sv_if = s(
             if ( {args} )
                 begin
                     {body}
-                end  // if
+                end{ending}
 
         ]],
         {
-            args = i(1, "logic_statment"),
-            body = i(2, "// TODO"),
+            args    = i(1, "logic_statment"),
+            body    = i(2, "// TODO"),
+            ending  = c(3, {
+                        t(" // if"),
+                        t(""),
+            }),
         }
     )
 )
@@ -343,12 +347,16 @@ local sv_else_if = s(
             else if ( {args} )
                 begin
                     {body}
-                end  // if
+                end{ending}
 
         ]],
         {
-            args = i(1, "logic_statment"),
-            body = i(2, "// TODO"),
+            args    = i(1, "logic_statment"),
+            body    = i(2, "// TODO"),
+            ending  = c(3, {
+                        t(" // else if"),
+                        t(""),
+            }),
         }
     )
 )
@@ -364,11 +372,15 @@ local sv_else = s(
             else
                 begin
                     {body}
-                end  // else
+                end{ending}
 
         ]],
         {
-            body = i(1, "// TODO"),
+            body    = i(1, "// TODO"),
+            ending  = c(2, {
+                        t(" // else"),
+                        t(""),
+            }),
         }
     )
 )
@@ -736,28 +748,28 @@ table.insert(snippets, disabled_fork)
 --------------------------------------------------------------------
 -- try out the cs function
 --------------------------------------------------------------------
-cs(
-    "endstatment",
-    fmt(
-        [[
-        end // {}
-        ]],
-        {
-            c(1, {
-                t("if"),
-                t("foreach"),
-                t("forever"),
-                t("repeat"),
-                t("while"),
-                t("initial"),
-                t("always"),
-                t("always_ff"),
-                t("always_comb"),
-            }),
-        }
-    ),
-    "jj"
-)
+-- cs(
+--     "endstatment",
+--     fmt(
+--         [[
+--         end // {}
+--         ]],
+--         {
+--             c(1, {
+--                 t("if"),
+--                 t("foreach"),
+--                 t("forever"),
+--                 t("repeat"),
+--                 t("while"),
+--                 t("initial"),
+--                 t("always"),
+--                 t("always_ff"),
+--                 t("always_comb"),
+--             }),
+--         }
+--     ),
+--     "jj"
+-- )
 
 --------------------------------------------------------------------
 -- create
