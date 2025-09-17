@@ -1,18 +1,19 @@
 require("luasnip.session.snippet_collection").clear_snippets "verilog_systemverilog"
-
 local ls   = require "luasnip"
-local s    = ls.snippet
-local c    = ls.choice_node
-local d    = ls.dynamic_node
-local i    = ls.insert_node
-local t    = ls.text_node
-local f    = ls.function_node
-local sn   = ls.snippet_node
 
-local fmta = require("luasnip.extras.fmt").fmta
-local fmt  = require("luasnip.extras.fmt").fmt
-local rep  = require("luasnip.extras").rep
-local l    = require("luasnip.extras").lambda
+local utils = require("snippets.snippet_utils")
+local s     = utils.s
+local c     = utils.c
+local d     = utils.d
+local i     = utils.i
+local t     = utils.t
+local f     = utils.f
+local sn    = utils.sn
+local fmta  = utils.fmta
+local fmt   = utils.fmt
+local rep   = utils.rep
+local l     = utils.lambda
+
 
 local return_filename = function()
     return vim.fn.expand("%:r") .. "::"

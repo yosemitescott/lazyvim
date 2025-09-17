@@ -22,8 +22,51 @@ end
 return {
     "folke/snacks.nvim",
     opts = {
-        scroll  = { enabled = false,},
-        git     = { enabled = true, },
+        scroll   = { enabled = false,},
+        git      = { enabled = true, },
+        keys = {
+            {
+                "<C-q>",
+                function()
+                    local snacks = require("snacks")
+                    local picker = snacks.get_current_picker()
+
+                    if not picker then
+                        return
+                    end
+
+                    local entries = picker:selected_entries()
+                    if #entries == 0 then
+                        entries = picker:entries()
+                    end
+
+                    local qf_entries = {}
+                    for _, entry in ipairs(entries) do
+                        table.insert(qf_entries, {
+                            filename = entry.path,
+                            lnum = 1,
+                            col = 1,
+                            text = entry.text or "",
+                        })
+                    end
+
+                    vim.fn.setqflist(qf_entries)
+                    picker:close()
+                    vim.cmd("copen")
+                end,
+                desc = "Send to quickfix list",
+            },
+        },
+--      explorer = {
+--          enabled = true,
+--          win = {
+--              list = {
+--                  keys = {
+--                      ["O"] = { "O", { "pick_win", "jump" }, mode = { "n", "i" } },
+--                  },
+--              },
+--          },
+--      },
 --      lazygit = { enabled = true, },
 --      win     = { enabled = true, },
         dashboard = {
@@ -31,7 +74,7 @@ return {
             preset = {
                 header = my_header,
                 keys = {
-                    { icon = " ", key = "G", desc = "Git Fugitive",        action  = ":G"},
+                    { icon = " ", key = "G", desc = "Git Fugitive",        action  = ":0G"},
                     { icon = "󰐅 ", key = "E", desc = "NeoTree",             action  = ":Neotree"},
                     { icon = " ", key = "f", desc = "Find File",           action  = ":lua Snacks.dashboard.pick('files')" },
                     { icon = " ", key = "n", desc = "New File",            action  = ":ene | startinsert" },

@@ -2,6 +2,24 @@ local function theme_cycler(step)
     MyThemeState  = 0
     local themes = {
         "neofusion",
+        "gruvbox",
+        "everforest",
+        "miasma",
+        "rose-pine",
+        "PaperColor",
+        "zenbones",
+        "zenwritten",
+        "neobones",
+--      "vimbones",
+        "rosebones",
+        "forestbones",
+        "nordbones",
+        "tokyobones",
+        "seoulbones",
+        "duckbones",
+        "zenburned",
+        "kanagawabones",
+--      "randombones",
         "moonfly",
         "nightfly",
         "nightfox",
@@ -9,9 +27,6 @@ local function theme_cycler(step)
         "nordfox",
         "duskfox",
         "terafox",
-        "gruvbox",
-        "everforest",
-        "PaperColor",
         "catppuccin-mocha",
         "catppuccin-frappe",
         "catppuccin-macchiato",
@@ -33,8 +48,6 @@ local function theme_cycler(step)
         "github_dark_dimmed",
         "github_dark_high_contrast",
         "github_dark_tritanopia",
-        "miasma",
-        "rose-pine",
     }
     return function ()
         if (step == 1) then

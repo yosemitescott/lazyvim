@@ -55,6 +55,9 @@ return {
                     ["S"] = "split_with_window_picker",
                     ["s"] = "vsplit_with_window_picker",
                     ["v"] = "vsplit_with_window_picker",
+                    ["<C-S>"] = "split_with_window_picker",
+                    ["<C-s>"] = "vsplit_with_window_picker",
+                    ["<C-v>"] = "vsplit_with_window_picker",
                 },
             },
 

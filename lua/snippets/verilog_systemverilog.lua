@@ -1,3 +1,19 @@
+local sv_abbreviations = {
+    qec  = "endcase",
+    qei  = "end // if",
+    qee  = "end // else",
+    qeei = "end // else if",
+    qein = "end // initial",
+    qewh = "end // while",
+    qea  = "end // always",
+    qefo = "end // forever",
+    qaco = "always_comb",
+    qaff = "always_ff @ ( posedge clk )"
+}
+
+
+local utils = require('config.utils')
+
 local ls = require("luasnip") --{{{
 local s = ls.s -- Snippet
 local i = ls.i -- Insert node
@@ -92,6 +108,17 @@ local filename = function()
     return f(function(_args, snip)
         local name = vim.split(snip.snippet.env.TM_FILENAME, ".", true)
         return name[1] .. "::" or ""
+    end)
+end
+
+--------------------------------------------------------------------
+-- Function to return the method name of a task or function
+--------------------------------------------------------------------
+local function method_name(prefix)
+    return f(function(_args, snip)
+--      return "{get_name(), ::" .. utils.get_current_method_name() .. "}"
+--      return "{" .. prefix ..  ", ::" .. utils.get_current_method_name() .. "}"
+        return string.format('{%s, "::%s"}', prefix, utils.get_current_method_name())
     end)
 end
 
@@ -470,48 +497,25 @@ local uvm_info = s(
     fmt(
         [[
         `uvm_info({}, {}, {})
-
         ]],
         {
             c(1, {
+                method_name("get_name()"),
                 t("get_name()"),
+                method_name("get_type_name()"),
                 t("get_type_name()"),
                 t('"SPF"'),
-                sn(
-                    1,
-                    fmt(
-                        [[
-                    "{}"
-                    ]],
-                        i(1, "roll_your_own")
-                    )
-                ),
+                t('{get_name(), "::debug"}'),
+                sn(1, fmt("\"{}\"", { i(1, "roll_your_own") })),
             }),
             c(2, {
-                sn(
-                    1,
-                    fmt(
-                        [[
-                        $sformatf("{}", {})
-                        ]],
-                        {
-                            i(1, "Enter String Format Stuff"),
-                            i(2, "Variable(s)"),
-                        }
-                    )
-                ),
-
-                sn(
-                    2,
-                    fmt(
-                        [[
-                    "{}"
-                    ]],
-                        {
-                            i(1, "Enter String Stuff"),
-                        }
-                    )
-                ),
+                sn(1, fmt("$sformatf(\"{}\", {})", {
+                    i(1, "Enter String Format Stuff"),
+                    i(2, "Variable(s)"),
+                })),
+                sn(2, fmt("\"{}\"", {
+                    i(1, "Enter String Stuff"),
+                })),
             }),
             c(3, {
                 t("UVM_LOW"),
@@ -543,7 +547,9 @@ local uvm_error = s(
                 t("uvm_fatal"),
             }),
             c(2, {
+                method_name("get_name()"),
                 t("get_name()"),
+                method_name("get_type_name()"),
                 t("get_type_name()"),
                 t('"SPF"'),
                 sn(
@@ -610,7 +616,7 @@ local uvm_component_verbosity = s(
     )
 )
 
-table.insert(snippets, component_verbosity)
+table.insert(snippets, uvm_component_verbosity)
 
 --------------------------------------------------------------------
 -- `uvm_info snippet
@@ -685,7 +691,7 @@ local uvm_randomize = s(
         {})
             begin
                 `uvm_fatal(get_type_name(), "Failed to randomize {}")
-            end  // if
+            end
 
         ]],
         {
@@ -779,9 +785,22 @@ local myFirstAutoSnippet = s("dude", { t("This was auto triggered") })
 
 table.insert(autosnippets, myFirstAutoSnippet) -- autosnippets is the key word
 
--- autosnippet(
---     "myinfo", 
---     { t("Author: Scott Follmer (sfollmer@blueorigin.com)") }
--- )
+
+--------------------------------------------------------------------
+-- This adds my table of SV abbreviations
+--------------------------------------------------------------------
+local function create_abbreviation_snippets()
+    local abbr_snippets = {}
+    for abbr, expansion in pairs(sv_abbreviations) do
+        table.insert(abbr_snippets, s(abbr, { t(expansion) }))
+    end
+    return abbr_snippets
+end
+
+local abbr_snippets = create_abbreviation_snippets()
+for _, snippet in ipairs(abbr_snippets) do
+    table.insert(autosnippets, snippet)
+end
 
 return snippets, autosnippets
+

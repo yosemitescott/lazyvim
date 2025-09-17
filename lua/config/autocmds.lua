@@ -47,6 +47,13 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     end,
 })
 
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = { "conf" },
+    callback = function()
+        vim.cmd.colorscheme "moonfly"
+    end,
+})
+
 vim.cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
 
 vim.api.nvim_create_autocmd({ "VimResized" }, {
@@ -111,6 +118,21 @@ vim.api.nvim_create_autocmd({ "WinLeave", "FocusLost", "InsertEnter" }, {
         vim.opt_local.cursorline = false
     end,
 })
+
+------------------------------------------------------------------------
+-- The ones I added
+------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 -- vim.api.nvim_create_autocmd("ColorScheme", {
 --   pattern  = { "*" },

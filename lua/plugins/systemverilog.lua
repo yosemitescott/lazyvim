@@ -1,18 +1,19 @@
 -- if true then return {} end
+local utils = require('config.utils')
 
 local M = {
     'vhda/verilog_systemverilog.vim',
     dependencies = {
         'pechorin/any-jump.vim',
         'preservim/tagbar',
+        'liuchengxu/vista.vim',
     },
     ft   = {"verilog", "verilog_systemverilog", "systemverilog"},
     keys = {
-        { "<leader>v",  group = "+systemverilog" },
         { "<leader>vj", "<cmd>AnyJump<CR>",                                              desc = "Jump Tag" },
         { "<leader>vJ", "<cmd>AnyJumpBack<CR>",                                          desc = "Jump Back" },
         { "<leader>vc", "0R//0",                                                       desc = "Comment out line" },
-        { "<leader>vs", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
+        { "<leader>vS", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
         { "<leader>vi", "<cmd>VerilogFollowInstance<CR>",                                desc = "follow Instance start" },
         { "<leader>vr", "<cmd>VerilogReturnInstance<CR>",                                desc = "Return instance" },
         { "<leader>vp", "<cmd>VerilogFollowPort<CR>",                                    desc = "follow Port" },
@@ -26,8 +27,7 @@ local M = {
         { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
 
-        { "<leader>vR",  group = "+Replace" },
-        { "<Leader>vRd", [[:s/\$display\((.*\);/`uvm_info(get_name(), $sformatf\1, UVM_LOW)<cr>]], desc = "Replace display with uvm_info"},
+        { "<Leader>vRd", [[:keeppatterns s/\$display\((.*\);/`uvm_info(get_name(), $sformatf\1, UVM_LOW)/<cr>]], desc = "Replace display with uvm_info"},
     },
     init = function()
 --      vim.opt_local['smartindent'] = false
@@ -37,7 +37,8 @@ local M = {
         --
         local wk = require("which-key")
         wk.add({
-            { "<leader>v", group = "+systemverilog" },
+            { "<leader>v",   group = "+systemverilog" },
+            { "<leader>vR",  group = "+Replace" },
         })
 
         vim.g.any_jump_disable_default_keybindings = 1
@@ -77,7 +78,47 @@ local M = {
 
 }
 
+-- Define a local table for our helper functions
+local helpers = {}
+
+helpers.ModeVerilog = function()
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+
+    -- Add your Verilog-specific settings here
+end
+
+helpers.ModeSV = function()
+    helpers.ModeVerilog()  -- Call the Verilog-compatible stuff
+
+    -- Add your SystemVerilog-specific settings here
+end
+
 function M.config()                 -- Use config since it's not a LUA plugin
+
+    -- Setup banners
+--  helpers.setup_banners()
+
+    -- Setup autocommands
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "verilog",
+        callback = helpers.ModeVerilog,
+    })
+
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = {"systemverilog", "verilog_systemverilog"},
+        callback = helpers.ModeSV,
+    })
+
+    -- File type detection
+    vim.filetype.add({
+        extension = {
+            v   = 'verilog_systemverilog',
+            svh = 'verilog_systemverilog',
+            sv  = 'verilog_systemverilog',
+        }
+    })
 
     ToggleBlockAlign = function()
         if (vim.b.verilog_indent_block_on_keyword == nil) then
@@ -98,48 +139,49 @@ function M.config()                 -- Use config since it's not a LUA plugin
     end
 
     AddUVMInfoMethodName = function()
-        -- Save the current position to return to it
-        local marka = vim.api.nvim_win_get_cursor(0)
-        local row, col = unpack(marka)
+        -- Get the current line number and content
+        local row = vim.fn.line('.')
+        local line = vim.fn.getline(row)
 
-        -- Search for the pattern `end[ft]` which is either endfunction or endtask
-        vim.cmd("keeppatterns /end[ft]")
+        -- Get the method name using the utility function
+        local method_info = "{get_name(), ::" .. utils.get_current_method_name() .. "}"
 
---      -- Go to start of the line, then go to the matching function/task and yank the name
-        vim.cmd("normal 0")
-        vim.cmd("normal %")
-        local method_name = string.match(vim.api.nvim_get_current_line(), '::([%w_]+)')
+        -- Extract the UVM macro name
+        local uvm_ = line:match('(uvm_[%l]+)')
+        if not uvm_ then
+            print("No UVM macro found on the current line.")
+            return
+        end
 
---      -- Go to mark `a` and add custom text
-        vim.api.nvim_win_set_cursor(0, marka)
-        local line        = vim.api.nvim_get_current_line()
-        local uvm_        = string.match(line, '(uvm_[%l]+)')
-        local insert_text = uvm_ .. '({get_name(), "::' .. method_name .. '"},'
-        local new_line    = string.gsub(line, '([%w_()]+,', insert_text, 1)
+        -- Construct the new text to insert
+        local insert_text = string.format('%s(%s,', uvm_, method_info)
 
-        -- Replace current line and recenter screen
-        vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})
-        vim.cmd("normal zz")
+        -- Replace the first occurrence of a word followed by a parenthesis and comma
+        local new_line = line:gsub('([%w_]+%(%),)', insert_text, 1)
+
+        -- Replace the current line
+        vim.fn.setline(row, new_line)
+
+        -- Recenter the screen
+        vim.cmd('normal! zz')
     end
 
     AddSVEndLabel = function()
-        -- Save the current position to return to it
-        local marka = vim.api.nvim_win_get_cursor(0)
-        local row, col = unpack(marka)
+        -- Get the current line number and content
+        local row = vim.fn.line('.')
+        local line = vim.fn.getline(row)
 
---      -- Go to start of the line, then go to the matching function/task and yank the name
-        vim.cmd("normal 0")
-        vim.cmd("normal %")
-        local method_name = string.match(vim.api.nvim_get_current_line(), '::([%w_]+)')
+        -- Get the method name using the utility function
+        local method_info = utils.get_current_method_name()
 
 --      -- Go to mark `a` and add custom text
-        vim.api.nvim_win_set_cursor(0, marka)
-        local line     = vim.api.nvim_get_current_line()
-        local new_line = line .. ': ' .. method_name
+        local new_line = line ..  ': ' .. method_info
 
-        -- Replace current line and recenter screen
-        vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})
-        vim.cmd("normal zz")
+        -- Replace the current line
+        vim.fn.setline(row, new_line)
+
+        -- Recenter the screen
+        vim.cmd('normal! zz')
     end
 
 
@@ -222,29 +264,6 @@ function M.config()                 -- Use config since it's not a LUA plugin
         set shiftwidth=4
 
 
-        "*******************************************
-        "Remove VHDL Abbreviations in case
-        "*******************************************
-        "--------------------------------
-        "Abbreviations for Verilog
-        "--------------------------------
-        iab <buffer> <expr> cb0 DoubleSlashBannerComment(g:cb_0)
-        iab <buffer> <expr> cb1 DoubleSlashBannerComment(g:cb_1)
-        iab <buffer> <expr> cb2 DoubleSlashBannerComment(g:cb_2)
-        iab <buffer> <expr> cb3 DoubleSlashBannerComment(g:cb_3)
-        iab <buffer> <expr> cb4 DoubleSlashBannerComment(g:cb_4)
-
-        iab <buffer> cbox // _________________________________________________________________________________ //\| //\| //\|_________________________________________________________________________________
-
-        iab <buffer> ea end  // always
-        iab <buffer> ec endcase
-        iab <buffer> ei end  // if
-        iab <buffer> ee end  // else
-        iab <buffer> eei end  // else if
-        iab <buffer> ein end  // initial
-        iab <buffer> efo end  // forever
-        iab <buffer> ewh end  // while
-
 
         "set verbosefile=verbose.txt
         "let g:verilog_verbose="true"      " for t/s this plugin
@@ -255,21 +274,6 @@ function M.config()                 -- Use config since it's not a LUA plugin
     function! ModeSV()
 
         call ModeVerilog()  " Call the verilog compatable stuff
-
-        "--------------------------------
-        "Abbreviations for System Verilog
-        "--------------------------------
-        iab <buffer> aff always_ff @ ( posedge clk )
-        iab <buffer> aco always_comb
-        iab <buffer> eaf end // always_ff
-        iab <buffer> eac end // always_comb
-
-        iab <buffer> uvmnone +UVM_VERBOSITY=UVM_NONE
-        iab <buffer> uvmlow +UVM_VERBOSITY=UVM_LOW
-        iab <buffer> uvmmed +UVM_VERBOSITY=UVM_MEDIUM
-        iab <buffer> uvmhigh +UVM_VERBOSITY=UVM_HIGH
-        iab <buffer> uvmfull +UVM_VERBOSITY=UVM_FULL
-        iab <buffer> uvmdebug +UVM_VERBOSITY=UVM_DEBUG
 
         "*******************************************
         "SystemVerilog Stuff
@@ -310,6 +314,7 @@ function M.config()                 -- Use config since it's not a LUA plugin
 
     ]]
 end
+
 
 return M
 

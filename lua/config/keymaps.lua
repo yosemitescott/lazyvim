@@ -2,8 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 --
-local opts = { noremap = true, silent = true }
-
+local opts      = { noremap = true, silent = true }
 local term_opts = { silent = true }
 
 -- Shorten function name
@@ -53,6 +52,9 @@ keymap("n", "<C-d>", "<C-d>zz", opts)
 keymap("n", "n", "nzzzv", opts)
 keymap("n", "N", "Nzzzv", opts)
 
+-- 
+keymap("n", "<C-y>", "<cmd>lua require('config.utils').copy_uvm_error_time()<CR>", opts)
+
 --   -- Resize with arrows
 --   keymap("n", "<C-Up>",    ":resize +2<CR>", opts)
 --   keymap("n", "<C-Down>",  ":resize -2<CR>", opts)
@@ -72,14 +74,14 @@ keymap("n", "N", "Nzzzv", opts)
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", { noremap = true, silent = true, desc = "Close/Delete Buffer" })
 
 -- Delete Trailing Whitespace
-keymap("n", "<leader>cc", [[mr:%s/\s\+$//e<cr>`r]],   { noremap = true, silent = true, desc = "Clean Up Code" })
-keymap("n", "<leader>cC", [[:bufdo %s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code - All buffers" })
-keymap("n", "<leader>c=", [[gg=G]],                   { noremap = true, silent = true, desc = "Reformat all lines" })
-keymap("n", "<leader>cp", [[:ProjectRoot]],           { noremap = true, silent = true, desc = "add Project" })
+keymap("n", "<leader>cc", [[mr:keeppattern %s/\s\+$//e<cr>`r]],   { noremap = true, silent = true, desc = "Clean Up Code" })
+keymap("n", "<leader>cC", [[:bufdo keeppattern %s/\s\+$//e<cr>]], { noremap = true, silent = true, desc = "Clean Up Code - All buffers" })
+keymap("n", "<leader>c=", [[gg=G]],                               { noremap = true, silent = true, desc = "Reformat all lines" })
+keymap("n", "<leader>cp", [[:ProjectRoot]],                       { noremap = true, silent = true, desc = "add Project" })
 
 -- Remove Color codes from UVM Logs
 --keymap("n", "<leader>cu", "<cmd>%s/[[0-9;]*m//g<cr>", { noremap = true, silent = true, desc = "Clean Up UVM color codes" })
-keymap("n", "<leader>cu", [[mr:%s/<C-v><esc>[[0-9;]\{2,}m//g<cr>`r]], { noremap = true, silent = true, desc = "Clean Up UVM color codes" })
+keymap("n", "<leader>cu", [[mr:keeppattern %s/<C-v><esc>[[0-9;]\{2,}m//g<cr>`r]], { noremap = true, silent = true, desc = "Clean Up UVM color codes" })
 
 --   command = [[%s/\s\+$//e]],
 
@@ -91,12 +93,6 @@ keymap("n", "<leader>cu", [[mr:%s/<C-v><esc>[[0-9;]\{2,}m//g<cr>`r]], { noremap 
 -- Move text up and down
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", { noremap = true, silent = true, desc = "Move Line Up" })
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", { noremap = true, silent = true, desc = "Move Line Down" })
-
--- FINDING AND REPLACING
--- Press * to search for the term under the cursor or in a visual selection and
--- then press a key below to replace all instances of it in the current file.
-keymap("n", "<leader>s*", ":%s/<C-r><C-w>/", { noremap = true, silent = true, desc = "Search/Replace Dialogue" })
-keymap("n", "<leader>s8", ":%s/\\<<C-r><C-w>\\>/", { noremap = true, silent = true, desc = "Search/Replace Dialogue Boundary" })
 
 --   -- Behave VIM
 --   keymap('n', 'Y', "y$", opts)
@@ -112,6 +108,13 @@ wk.add({
     { "<leader>y", '"+y', mode = { "v"}, desc = "Yank to System Clipboard" },
     { "<leader>y", '"+p', mode = { "n"}, desc = "Paste from System Clipboard" },
 })
+
+--   ----------------------------------------------------------------------
+--   -- Open files
+--   ----------------------------------------------------------------------
+keymap("n", "<C-W><C-F>", "<C-W>vgf", { noremap = true, silent = true, desc = "Open file under cursor in new vertical pane" })
+keymap("n", "<C-W>f",     "<C-W>vgf", { noremap = true, silent = true, desc = "Open file under cursor in new vertical pane" })
+keymap("n", "<C-W>F",     "<C-W>f",   { noremap = true, silent = true, desc = "Open file under cursor in new horizontal pane" })
 
 --   ----------------------------------------------------------------------
 --   -- Access neovim config
@@ -253,6 +256,8 @@ wk.add({
     { "<leader>ja", [[:r $XDG_CONFIG_HOME/nvim/files/tempa<CR>]],    mode = "n", desc = "Read from Temp File a" },
     { "<leader>jb", [[:r $XDG_CONFIG_HOME/nvim/files/tempb<CR>]],    mode = "n", desc = "Read from Temp File b" },
     { "<leader>jc", [[:r $XDG_CONFIG_HOME/nvim/files/tempc<CR>]],    mode = "n", desc = "Read from Temp File c" },
+    { "<leader>jr", [[:. !rep ]],                                    mode = "n", desc = "Start Replicate Command" },
+    { "<leader>jr", [[:!rep ]],                                      mode = "v", desc = "Start Replicate Command" },
 })
 
 --   ----------------------------------------------------------------------
@@ -267,3 +272,21 @@ wk.add({
     { "<Leader>db", "<cmd>set diffopt+=iblank<CR>",         mode = "n", desc = "Add ignore blank" },
     { "<Leader>dB", "<cmd>set diffopt-=iblank<CR>",         mode = "n", desc = "Remove ignore blank" },
 })
+
+--   ----------------------------------------------------------------------
+--   Search options
+--   ----------------------------------------------------------------------
+-- FINDING AND REPLACING
+-- Press * to search for the term under the cursor or in a visual selection and
+-- then press a key below to replace all instances of it in the current file.
+wk.add({
+    { "<Leader>s*", ":%s/<C-r><C-w>/",       mode = "n", desc = "Search/Replace Dialogue" },
+    { "<Leader>s8", ":%s/\\<<C-r><C-w>\\>/", mode = "n", desc = "Search/Replace Dialogue Boundary" },
+    { "<leader>su",  group = "+User" },
+    { "<Leader>sue", [[/\<UVM_ERROR\><cr>]], mode = "n", desc = "Search UVM_ERROR"},
+})
+
+
+-- keymap("n", "<leader>s*", ":%s/<C-r><C-w>/",       { noremap = true, silent = true, desc = "Search/Replace Dialogue" })
+-- keymap("n", "<leader>s8", ":%s/\\<<C-r><C-w>\\>/", { noremap = true, silent = true, desc = "Search/Replace Dialogue Boundary" })
+
