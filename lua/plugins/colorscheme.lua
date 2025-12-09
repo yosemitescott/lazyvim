@@ -16,6 +16,29 @@ return {
         },
     },
 
+    {
+        'everviolet/nvim',
+        name = 'evergarden',
+        priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
+        opts = {
+            theme = {
+                variant = 'fall', -- 'winter'|'fall'|'spring'|'summer'
+                accent = 'green',
+            },
+            editor = {
+                transparent_background = false,
+                sign = { color = 'none' },
+                float = {
+                    color = 'mantle',
+                    solid_border = false,
+                },
+                completion = {
+                    color = 'surface0',
+                },
+            },
+        },
+    },
+
     { "sainnhe/everforest",
         config = function()
             vim.g.everforest_dim_inactive_windows = 1
@@ -28,10 +51,18 @@ return {
     { "catppuccin/nvim",
         config = function()
             require("catppuccin").setup({
+                auto_integrations = true,
                 dim_inactive = {
                     enabled = true, -- dims the background color of inactive window
                     shade = "dark",
                     percentage = 0.15, -- percentage of the shade to apply to the inactive window
+                },
+                color_overrides = {
+                    mocha = {
+                        base = "#000000",
+                        mantel = "#000000",
+                        --crust = "#000000",
+                    },
                 },
             })
         end,

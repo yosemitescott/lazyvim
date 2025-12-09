@@ -42,7 +42,9 @@ return {
                         schema = {
                             model = {
                                 -- default = "gpt-4o",
-                                default = "anthropic.claude-3-5-sonnet-20240620-v1:0",
+--                              default = "anthropic.claude-3-5-sonnet-20240620-v1:0",
+--                              default = "anthropic.claude-sonnet-4-5-20250929-v1:0",
+                                default = "anthropic.claude-sonnet-4-20250514-v1:0",
                                 -- default = "o3-mini",
                             },
                         },

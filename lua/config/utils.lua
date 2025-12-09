@@ -79,8 +79,9 @@ M.get_current_method_name = function()
     for i = current_line, 1, -1 do
         local line = vim.fn.getline(i)
 
+-- function rule_pointer_t ethernet_pipeline_registers::search_pcl_pointer(
         -- Match class-style function/task definitions (e.g., function void class_name::method_name)
-        local class_name, method_name = line:match("^%s*function%s+[%w%s:]+%s+([%w_]+)::([%w_]+)")
+        local class_name, method_name = line:match("^%s*function%s+[%w_%s:]+%s+([%w_]+)::([%w_]+)")
         if class_name and method_name then
             return method_name
         end
@@ -92,7 +93,7 @@ M.get_current_method_name = function()
         end
 
         -- Match regular function definitions (e.g., function void method_name)
-        method_name = line:match("^%s*function%s+[%w%s:]+%s+([%w_]+)")
+        method_name = line:match("^%s*function%s+[%w_%s:]+%s+([%w_]+)")
         if method_name then
             return method_name
         end
@@ -109,7 +110,7 @@ M.get_current_method_name = function()
         end
     end
 
-    return '"Method Name Not Found"'
+    return 'Method_Name_Not_Found'
 end
 
 -- ==============================================================================================

@@ -10,6 +10,11 @@ local keymap = vim.api.nvim_set_keymap
 
 local wk = require("which-key")
 
+-- Define a local function to get the config directory
+local function get_config_dir()
+    return (os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")) .. "/nvim/lua"
+end
+
 -- Delete default keymaps
 -- vim.api.nvim_del_keymap("n", "<S-L>")
 -- vim.api.nvim_del_keymap("n", "<S-H>")
@@ -90,6 +95,8 @@ keymap("n", "<leader>cu", [[mr:keeppattern %s/<C-v><esc>[[0-9;]\{2,}m//g<cr>`r]]
 --   keymap('n', '<M-f>', '<C-W>vgf', opts)
 --   keymap('n', '<M-]>', '<C-W>v<c-]>', opts)
 
+keymap("n", "<leader>\\", "<C-w>v", { noremap = true, silent = true, desc = "Split Window Right" })
+
 -- Move text up and down
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", { noremap = true, silent = true, desc = "Move Line Up" })
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", { noremap = true, silent = true, desc = "Move Line Down" })
@@ -119,7 +126,8 @@ keymap("n", "<C-W>F",     "<C-W>f",   { noremap = true, silent = true, desc = "O
 --   ----------------------------------------------------------------------
 --   -- Access neovim config
 --   ----------------------------------------------------------------------
-vim.keymap.set("n", "<leader>C", [[:Neotree $XDG_CONFIG_HOME/nvim/lua<CR>]], {desc = " Config"})
+--m.keymap.set("n", "<leader>C", [[:Neotree $XDG_CONFIG_HOME/nvim/lua<CR>]], {desc = " Config"})
+vim.keymap.set("n", "<leader>C", function() vim.cmd("Neotree dir=" .. get_config_dir()) end, {desc = " Config"})
 
 --   ----------------------------------------------------------------------
 --   -- Insert --

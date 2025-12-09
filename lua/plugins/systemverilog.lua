@@ -1,4 +1,3 @@
--- if true then return {} end
 local utils = require('config.utils')
 
 local M = {
@@ -7,13 +6,14 @@ local M = {
         'pechorin/any-jump.vim',
         'preservim/tagbar',
         'liuchengxu/vista.vim',
+        'tpope/vim-repeat',
     },
     ft   = {"verilog", "verilog_systemverilog", "systemverilog"},
     keys = {
         { "<leader>vj", "<cmd>AnyJump<CR>",                                              desc = "Jump Tag" },
         { "<leader>vJ", "<cmd>AnyJumpBack<CR>",                                          desc = "Jump Back" },
         { "<leader>vc", "0R//0",                                                       desc = "Comment out line" },
-        { "<leader>vS", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
+--      { "<leader>vS", "<cmd>VerilogGotoInstanceStart<CR>",                             desc = "goto instance Start" },
         { "<leader>vi", "<cmd>VerilogFollowInstance<CR>",                                desc = "follow Instance start" },
         { "<leader>vr", "<cmd>VerilogReturnInstance<CR>",                                desc = "Return instance" },
         { "<leader>vp", "<cmd>VerilogFollowPort<CR>",                                    desc = "follow Port" },
@@ -22,12 +22,26 @@ local M = {
         { "<leader>vf", "<cmd>VerilogFoldingRemove comment<CR> <BAR><cmd>foldopen!<CR>", desc = "Remove comment Folding" },
         { "<leader>vF", "<cmd>VerilogFoldingAdd comment<CR>",                            desc = "Add comment Folding" },
         { "<Leader>vb", "<cmd>lua ToggleBlockAlign()<CR>",                               desc = "Toggle Block Alignment" },
-        { "<Leader>vu", "<cmd>lua AddUVMInfoMethodName()<CR>",                           desc = "Add UVM Method Identifier to UVM messages" },
-        { "<Leader>ve", "<cmd>lua AddSVEndLabel()<CR>",                                  desc = "Add SystemVerilog End Method Identifier" },
+        { "<Leader>vu", function() AddUVMInfoMethodName() end,                           desc = "Add UVM Method Identifier to UVM messages (repeatable)" },
+        { "<Leader>ve", function() AddSVEndLabel() end,                                  desc = "Add SystemVerilog End Method Identifier (repeatable)" },
         { "]v",         ':call tagbar#jumpToNearbyTag(1, "nearest", "s")<cr>',           desc = "Next verilog tag" },
         { "[v",         ':call tagbar#jumpToNearbyTag(-1, "nearest", "s")<cr>',          desc = "Previous verilog tag" },
 
         { "<Leader>vRd", [[:keeppatterns s/\$display\((.*\);/`uvm_info(get_name(), $sformatf\1, UVM_LOW)/<cr>]], desc = "Replace display with uvm_info"},
+        { "<leader>vs", function() RUN_SIMULATION_WITH_PROMPT() end,                    desc = "Run Simulation" },
+        { "<leader>vS", function() RUN_SIMULATION_LAST() end,                           desc = "Run Simulation (last)" },
+        { "<leader>vq", [[:copen<cr>]],                                                 desc = "Open Quickfix" },
+
+        -- File opening shortcuts
+        { "<leader>voc", function() OpenProjectFile("c") end,                           desc = "Open Constants" },
+        { "<leader>vop", function() OpenProjectFile("p") end,                           desc = "Open Predictor" },
+        { "<leader>vov", function() OpenProjectFile("v") end,                           desc = "Open VSEQ Base" },
+
+        -- Directory opening shortcuts  
+        { "<leader>voe", function() OpenProjectDir("e") end,                            desc = "Open ENV in neotree" },
+        { "<leader>vot", function() OpenProjectDir("t") end,                            desc = "Open TESTS in neotree" },
+        { "<leader>vob", function() OpenProjectDir("b") end,                            desc = "Open BVM submodule in neotree" },
+        { "<leader>von", function() OpenProjectDir("n") end,                            desc = "Open TB submodule common in neotree" },
     },
     init = function()
 --      vim.opt_local['smartindent'] = false
@@ -39,6 +53,7 @@ local M = {
         wk.add({
             { "<leader>v",   group = "+systemverilog" },
             { "<leader>vR",  group = "+Replace" },
+            { "<leader>vo",  group = "+Open" },
         })
 
         vim.g.any_jump_disable_default_keybindings = 1
@@ -49,7 +64,6 @@ local M = {
         vim.o.autoindent  = true
         vim.o.smartindent = false
         vim.b.commentstring = "//"
---      vim.o.colorcolumn = "139"
 
         vim.g.verilog_disable_indent_lst         = "eos"
         vim.g.verilog_syntax_fold_lst            = "comment"
@@ -67,15 +81,6 @@ local M = {
 --      vim.g.verilog_instance_skip_last_coma    = 1
 --      vim.g.tagbar_ctags_bin                   = 'uctags'
     end,
-
---  vim.filetype.add({
---      extension = {
---          v   = 'verilog_systemverilog',
---          svh = 'verilog_systemverilog',
---          sv  = 'verilog_systemverilog',
---      }
---  }),
-
 }
 
 -- Define a local table for our helper functions
@@ -97,8 +102,12 @@ end
 
 function M.config()                 -- Use config since it's not a LUA plugin
 
-    -- Setup banners
---  helpers.setup_banners()
+    -- Simple errorformat since we're pre-filtering with grep
+    vim.opt.errorformat = {
+        "** at %f(%l): %m",
+        "%f(%l): %m",
+    }
+
 
     -- Setup autocommands
     vim.api.nvim_create_autocmd("FileType", {
@@ -144,7 +153,8 @@ function M.config()                 -- Use config since it's not a LUA plugin
         local line = vim.fn.getline(row)
 
         -- Get the method name using the utility function
-        local method_info = "{get_name(), ::" .. utils.get_current_method_name() .. "}"
+        local method_name = utils.get_current_method_name()
+        local method_info = string.format('{get_name(), "::%s"}', method_name)
 
         -- Extract the UVM macro name
         local uvm_ = line:match('(uvm_[%l]+)')
@@ -153,17 +163,17 @@ function M.config()                 -- Use config since it's not a LUA plugin
             return
         end
 
-        -- Construct the new text to insert
-        local insert_text = string.format('%s(%s,', uvm_, method_info)
-
         -- Replace the first occurrence of a word followed by a parenthesis and comma
-        local new_line = line:gsub('([%w_]+%(%),)', insert_text, 1)
+        local new_line = line:gsub('(`' .. uvm_ .. ')%s*%(.-,', '%1(' .. method_info .. ',', 1)
 
         -- Replace the current line
         vim.fn.setline(row, new_line)
 
         -- Recenter the screen
         vim.cmd('normal! zz')
+
+        -- Make the command repeatable
+        vim.fn['repeat#set'](vim.api.nvim_replace_termcodes("<cmd>lua AddUVMInfoMethodName()<CR>", true, true, true))
     end
 
     AddSVEndLabel = function()
@@ -182,8 +192,172 @@ function M.config()                 -- Use config since it's not a LUA plugin
 
         -- Recenter the screen
         vim.cmd('normal! zz')
+
+        -- Make the command repeatable
+        vim.fn['repeat#set'](vim.api.nvim_replace_termcodes("<cmd>lua AddSVEndLabel()<CR>", true, true, true))
     end
 
+    -- Store last simulation arguments
+    local last_sim_args = nil
+
+    -- Configuration tables for file and directory shortcuts
+    local project_files = {
+        c = "src/env/constants_pkg.sv",
+        p = "src/env/*_tb_predictor.svh",
+        v = "src/tests/vseq_base.svh",
+    }
+
+    local project_dirs = {
+        e = "src/env",
+        t = "src/tests",
+        b = "submodules/bvm",
+        n = "submodules/tb_ng_common",
+    }
+
+    -- Helper function to get git repository root
+    local function get_git_root()
+        local result = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null")
+        if vim.v.shell_error == 0 then
+            return vim.trim(result)
+        end
+        return vim.fn.getcwd() -- fallback to current directory
+    end
+
+    -- Helper function to resolve file patterns and open files
+    OpenProjectFile = function(key)
+        local file_pattern = project_files[key]
+        if not file_pattern then
+            vim.notify("No file mapping found for key: " .. key, vim.log.levels.ERROR)
+            return
+        end
+
+        local git_root = get_git_root()
+        local full_pattern = git_root .. "/" .. file_pattern
+
+        -- Handle wildcard patterns
+        if string.find(file_pattern, "*") then
+            local matches = vim.fn.glob(full_pattern, false, true)
+            if #matches == 0 then
+                vim.notify("No files found matching: " .. file_pattern, vim.log.levels.WARN)
+                return
+            elseif #matches == 1 then
+                full_pattern = matches[1]
+            else
+                -- Multiple matches, let user choose
+                vim.ui.select(matches, {
+                    prompt = "Select file to open:",
+                    format_item = function(item)
+                        return vim.fn.fnamemodify(item, ":t") -- show just filename
+                    end,
+                }, function(choice)
+                    if choice then
+                        OpenFileSmartSplit(choice)
+                    end
+                end)
+                return
+            end
+        end
+
+        OpenFileSmartSplit(full_pattern)
+    end
+
+    -- Helper function to open file with smart splitting logic  
+    OpenFileSmartSplit = function(filepath)
+        -- Check if file exists
+        if vim.fn.filereadable(filepath) == 0 then
+            vim.notify("File not found: " .. filepath, vim.log.levels.ERROR)
+            return
+        end
+
+        -- Smart splitting: vertical split if only one window OR if neotree is open
+        local win_count = vim.fn.winnr('$')
+        local has_neotree = false
+
+        -- Check if any window contains neotree
+        for i = 1, win_count do
+            local bufname = vim.fn.bufname(vim.fn.winbufnr(i))
+            if string.match(bufname, "neo%-tree") then
+                has_neotree = true
+                break
+            end
+        end
+
+        if win_count == 1 or (win_count == 2 and has_neotree) then
+            vim.cmd("vsplit " .. vim.fn.fnameescape(filepath))
+        else
+            vim.cmd("edit " .. vim.fn.fnameescape(filepath))
+        end
+    end
+
+    -- Helper function to open directories in neotree
+    OpenProjectDir = function(key)
+        local dir_path = project_dirs[key]
+        if not dir_path then
+            vim.notify("No directory mapping found for key: " .. key, vim.log.levels.ERROR)
+            return
+        end
+
+        local git_root = get_git_root()
+        local full_path = git_root .. "/" .. dir_path
+
+        if vim.fn.isdirectory(full_path) == 0 then
+            vim.notify("Directory not found: " .. full_path, vim.log.levels.ERROR)
+            return
+        end
+
+        -- Open neotree at the specified directory
+        vim.cmd("Neotree " .. vim.fn.fnameescape(full_path))
+    end
+    RUN_SIMULATION_WITH_PROMPT = function()
+        local test_args = vim.fn.input("Sim arguments (or Enter for default): ")
+        if test_args == "" then
+            test_args = "-t test_debug -b"
+        end
+
+        -- Store for later reuse
+        last_sim_args = test_args
+
+        local cmd = string.format(
+            "quickfix_from_sim_run.py -- %s",
+            test_args
+        )
+
+        print("Running simulation and generating quickfix...")
+        local result = vim.fn.system(cmd)
+        print(result)
+
+        local qf_file = "quickfix"
+        if vim.fn.filereadable(qf_file) == 1 then
+            vim.cmd("cfile " .. qf_file)
+            vim.cmd("copen")
+        else
+            print("Error: quickfix file not found")
+        end
+    end
+
+    RUN_SIMULATION_LAST = function()
+        if last_sim_args == nil then
+            print("No previous simulation run. Use RUN_SIMULATION_WITH_PROMPT first.")
+            return
+        end
+
+        local cmd = string.format(
+            "quickfix_from_sim_run.py -- %s",
+            last_sim_args
+        )
+
+        print("Re-running simulation with: " .. last_sim_args)
+        local result = vim.fn.system(cmd)
+        print(result)
+
+        local qf_file = "quickfix"
+        if vim.fn.filereadable(qf_file) == 1 then
+            vim.cmd("cfile " .. qf_file)
+            vim.cmd("copen")
+        else
+            print("Error: quickfix file not found")
+        end
+    end
 
     vim.filetype.add({
         extension = {
@@ -317,5 +491,4 @@ end
 
 
 return M
-
 

@@ -50,7 +50,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = { "conf" },
     callback = function()
-        vim.cmd.colorscheme "moonfly"
+        vim.cmd.colorscheme "forestbones"
     end,
 })
 

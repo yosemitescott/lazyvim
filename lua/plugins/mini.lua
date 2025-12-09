@@ -1,20 +1,20 @@
 return {
-    { "echasnovski/mini.pairs",      enabled = false },
-    { "echasnovski/mini.comment",    enabled = false },
-    { "echasnovski/mini.align",      config  = true, },
-    { "echasnovski/mini.bracketed",  config  = true, },
+    { "nvim-mini/mini.pairs",      enabled = false },
+    { "nvim-mini/mini.comment",    enabled = false },
+    { "nvim-mini/mini.align",      config  = true, },
+    { "nvim-mini/mini.bracketed",  config  = true, },
 
---  { "echasnovski/mini.comment",
+--  { "nvim-mini/mini.comment",
 --      opts  = { options = {
 --                              start_of_line = true,
 --                          },
 --      },
 --  },
---  { "echasnovski/mini.align",      config  = function(_, opts) require("mini.align").    setup(opts) end, },
-    --  {"echasnovski/mini.nvim", version = false },
+--  { "nvim-mini/mini.align",      config  = function(_, opts) require("mini.align").    setup(opts) end, },
+    --  {"nvim-mini/mini.nvim", version = false },
 
 --        {
---            "echasnovski/mini.hipatterns",
+--            "nvim-mini/mini.hipatterns",
 --            version = false,
 --            event   = { "BufReadPre", "BufNewFile" },
 --            opts    = function()

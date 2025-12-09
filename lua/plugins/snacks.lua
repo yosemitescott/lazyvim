@@ -19,6 +19,11 @@ local git_enabled = function()
   return obj.code == 0
 end
 
+-- Define a local function to get the config directory
+local function get_config_dir()
+    return (os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")) .. "/nvim/lua"
+end
+
 return {
     "folke/snacks.nvim",
     opts = {
@@ -81,7 +86,9 @@ return {
                     { icon = " ", key = "g", desc = "Find Text",           action  = ":lua Snacks.dashboard.pick('live_grep')" },
                     { icon = " ", key = "r", desc = "Recent Files",        action  = ":lua Snacks.dashboard.pick('oldfiles')" },
                     { icon = " ", key = "c", desc = "Config w/ fzf",       action  = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-                    { icon = " ", key = "C", desc = "Config w/ NeoTree",   action  = ":Neotree dir=$XDG_CONFIG_HOME/nvim/lua" },
+--                  { icon = " ", key = "C", desc = "Config w/ NeoTree",   action  = ":Neotree dir=$XDG_CONFIG_HOME/nvim/lua" },
+--                  { icon = " ", key = "C", desc = "Config w/ NeoTree",   action  = ":Neotree dir=/projects/sfollmer/shared/lazyvim/nvim/lua" },
+                    { icon = " ", key = "C", desc = "Config w/ NeoTree",   action  = function() vim.cmd("Neotree dir=" .. get_config_dir()) end},
                     { icon = " ", key = "s", desc = "Restore Session",     section = "session" },
                     { icon = " ", key = "x", desc = "Lazy Extras",         action  = ":LazyExtras" },
                     { icon = "󰒲 ", key = "l", desc = "Lazy",                action  = ":Lazy" },

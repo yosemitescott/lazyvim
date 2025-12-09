@@ -147,6 +147,36 @@ end
 -- end
 
 --------------------------------------------------------------------
+-- Function enum_loop
+--------------------------------------------------------------------
+local sv_enum_loop = s(
+    "enum_loop",
+    fmt(
+    [[
+    {} = {}.first();
+    do
+        begin
+            // TODO: use {} here
+            {} = {}.next();
+        end
+    while ( {} != {}.first() );
+    {}
+    ]],
+        {
+            i(1, "enum_variable"),
+            rep(1),
+            rep(1),
+            rep(1),
+            rep(1),
+            rep(1),
+            rep(1),
+            i(0)
+        }
+    )
+)
+table.insert(snippets, sv_enum_loop)
+
+--------------------------------------------------------------------
 -- Function snippet
 --------------------------------------------------------------------
 local sv_function = s(
@@ -155,37 +185,43 @@ local sv_function = s(
         [[ 
         //------------------------------------------------------------------------------
         // Function : {}
-        // {}
+        // {description}
         //
         // Parameters:
-        // {}
         // TODO: Complete function arguments
-        //
+        // {}
         //------------------------------------------------------------------------------
-        function {} {}{}({});
-            {}
+        function {return_type} {prefix}{function_name}({function_args});
+            {function_body}
         endfunction : {}
-        {}
+
+        // Function call for within the class
+        extern function {} {} ({});
+
+        {fin}
         ]],
         {
             rep(3),
-            i(6, " TODO: Function Description"),
+            description = i(6, " TODO: Function Description"),
             rep(4),
-            c(1, {
+            return_type = c(1, {
                 t("void"),
                 t("int"),
                 t("string"),
                 i(1, "enter_type"),
             }),
-            c(2, {
+            prefix = c(2, {
                 filename(),
                 t(""),
             }),
-            i(3, "function_name"),
-            i(4, ""),
-            i(5, "// TODO"),
+            function_name = i(3, "function_name"),
+            function_args = i(4, ""),
+            function_body = i(5, "// TODO"),
             rep(3),
-            i(0)
+            rep(1),
+            rep(3),
+            rep(4),
+            fin = i(0)
         }
     )
 )
@@ -241,32 +277,36 @@ local sv_task = s(
         [[ 
         //------------------------------------------------------------------------------
         // Task : {}
-        // {}
+        // {task_description}
         //
         // Parameters:
-        // {}
         // TODO: Complete task arguments
-        //
+        // {arg_description}
         //------------------------------------------------------------------------------
-        task {}{}({});
-            {}
+        task {prefix}{task_name}({task_arg});
+            {task_body}
         endtask : {}
 
-        {}
+        // Task call for within the class
+        extern task {} ({});
+
+        {fin}
         ]],
         {
             rep(2),
-            i(5, " TODO: Task Description"),
-            rep(3),
-            c(1, {
+            task_description = i(5, " TODO: Task Description"),
+            arg_description  = rep(3),
+            prefix = c(1, {
                 filename(),
                 t(""),
             }),
-            i(2, "task_name"),
-            i(3, ""),
-            i(4, "// TODO"),
+            task_name = i(2, "task_name"),
+            task_arg  = i(3, ""),
+            task_body = i(4, "// TODO"),
             rep(2),
-            i(0),
+            rep(2),
+            rep(3),
+            fin = i(0),
         }
     )
 )
@@ -625,28 +665,58 @@ local uvm_class = s(
     "uvmc",
     fmt(
         [[
-        class {} extends {};
-            {}({})
+        class {new_class} extends {baseclass};
 
-            function new (string name = "");
-                super.new(name);
-            endfunction : new
+            // UVM Factory Registration Macro
+            {utils}({})
+
+            // ---------------------------------------
+            // Attributes
+            // ---------------------------------------
+            {}
+
+            // ---------------------------------------
+            // Constraints
+            // ---------------------------------------
+            {}
+
+            // ---------------------------------------
+            // Methods
+            // ---------------------------------------
+            extern function new (string name = "");
 
             {}
 
         endclass : {}
 
+
+        //------------------------------------------------------------------------------
+        // Function: new
+        // Class constructor.
+        //
+        // Parameters:
+        // name   - Class object name
+        //------------------------------------------------------------------------------
+        function {}::new(string name = "");
+            super.new(name);
+        endfunction : new
+        {}
+
         ]],
         {
-            i(1, "new_class_name"),
-            i(2, "class_extended_from"),
-            c(3, {
+            new_class = i(1, "new_class_name"),
+            baseclass = i(2, "class_extended_from"),
+            utils     = c(3, {
                 t("`uvm_object_utils"),
                 t("`uvm_component_utils"),
             }),
             rep(1),
-            i(0, "// TODO"),
+            i(4, "// TODO"),
+            i(5, "// TODO"),
+            i(6, "// TODO"),
             rep(1),
+            rep(1),
+            i(0, "// TODO"),
         }
     )
 )
@@ -780,7 +850,7 @@ table.insert(snippets, disabled_fork)
 --------------------------------------------------------------------
 -- create
 --------------------------------------------------------------------
-local myFirstAutoSnippet = s("dude", { t("This was auto triggered") })
+local myFirstAutoSnippet = s("dspf", { t('$display("SPF - ') })
 -- local myFirstAutoSnippet = s("dude", f(comment_string()))
 
 table.insert(autosnippets, myFirstAutoSnippet) -- autosnippets is the key word
